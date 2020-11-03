@@ -17,6 +17,9 @@ let state = {
             {id:5, name: "Климентий", surname: "Ворошилов"},
             {id:6, name: "Апостол", surname: "Первый"},
           ],
+
+          newPostText: 'Anchor Value 1',
+          
     },
 
     dialogPage: {

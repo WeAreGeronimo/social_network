@@ -18,9 +18,9 @@ import My_Audios from './components/My_audios/My_Audios';
 
 
 const App = (props) => {
-
+  console.log(props.state.profilePage);
   return (
-
+    
     <div className="grid_container">
       <Header />
       <Nav />
