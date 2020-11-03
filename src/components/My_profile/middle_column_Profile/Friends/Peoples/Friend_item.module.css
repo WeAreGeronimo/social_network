@@ -1,0 +1,18 @@
+.friends_avatar img {
+ width: 50px;
+}
+
+.friends_avatar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.name_surname {
+    text-align: center;
+}
+
+.item_container {
+    margin-top: 20px;
+    margin-bottom: 5px;
+}

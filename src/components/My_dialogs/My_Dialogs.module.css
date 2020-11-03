@@ -1,0 +1,44 @@
+.container_dialogs {
+display: grid;
+grid-template-columns: 3fr 6fr;
+height: 95.4vh;
+
+}
+
+.container_messages { 
+    display: grid;
+    background-color: #f4f9ff;
+    border-left: 1px solid rgba(156, 156, 156, 0.4);
+    border-right: 1px solid rgba(156, 156, 156, 0.4);
+    margin-right: 8px;
+    grid-template-rows: 9fr auto;
+    align-items: end;
+    
+   
+    
+}
+
+.dialogs {
+    border-left: 1px solid rgba(156, 156, 156, 0.4);
+}
+
+.textarea_m {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.textarea_m textarea{
+    width: 500px;
+    height: 40px;
+    margin: 0 auto;
+}
+
+.textarea_m button {
+    width: 90px;
+    height: 30px;
+    margin: 0 auto;
+}
+
+

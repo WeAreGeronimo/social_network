@@ -1,0 +1,33 @@
+.blue_bar{
+
+height: 20px;
+background-color: #dce0e9;
+margin-top: 20px;
+font-weight: 700;
+color: #485d7c;
+padding-top: 5px;
+padding-left: 5px;
+border-top: 2px solid #485d7c;
+}
+
+.grey_bar {
+   display: grid;
+   grid-template-columns: 5fr 1fr;
+    background-color: rgba(156, 156, 156, 0.15);
+
+}
+
+.fr, .all {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-left: 5px;
+}
+
+.grid_f_friends {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    align-items: center;
+    justify-items: center;
+    
+}

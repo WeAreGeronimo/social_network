@@ -1,0 +1,19 @@
+.nav {
+    width: 206px;
+    margin-left: 10px;
+    grid-area: nav;
+  }
+  
+  .nav_elements {
+    margin-top: 8px;
+
+  
+  }
+
+  .nav a {
+    width: 206px;
+    margin-left: 10px;
+    grid-area: nav;
+    font-size: 15px;
+  }
+
