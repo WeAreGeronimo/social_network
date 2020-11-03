@@ -45,19 +45,23 @@ let state = {
 
 
 
-export let addPost = (postMessages) => {
-debugger;
+export let addPost = () => {
   let newPost = {
-
-    
-
-    id:4,
-    name: "Егор почти Крид", 
-    text_post: postMessages, 
-    time: "13:31", 
+    id: 4,
+    name: "Егор почти Крид",
+    text_post: state.profilePage.newPostText,
+    time: "13:31",
     likes_q: 0,
   };
   state.profilePage.postData.push(newPost);
+  state.profilePage.newPostText = '';
+  renderEntireTree(state);
+
+
+}
+
+export let updateNewPostText = (newText) => {
+  state.profilePage.newPostText = newText;
   renderEntireTree(state);
 }
 

@@ -12,19 +12,19 @@ const Wall = (props) => {
     let refTextArea = React.createRef(); 
     
     let onPostChange = () => {
-
+        let text = refTextArea.current.value;
+        props.updateNewPostText(text);
     }
 
-    let func = () => {
-        let text = refTextArea.current.value;
-        props.addPost(text);
-         refTextArea.current.value = "";
+    let addPost = () => {
+        props.addPost();
+         
     }
     
     return <div>
         
         <div className={_css.wall_textarea}><textarea className={_css.textarea} ref={refTextArea} onChange={onPostChange} value={props.newPostText} /></div>
-        <button onClick={func}>Отправить</button>
+        <button onClick={addPost}>Отправить</button>
         <div className={_css.sorting_post}>
             {NewPost_el}
         </div>
