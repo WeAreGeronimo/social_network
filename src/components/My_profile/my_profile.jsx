@@ -11,7 +11,7 @@ const MY_PROFILE = (props) => {
         <Name_bar />
        
         <MiddleColumnProfile friendData ={props.state.friendData}/>
-        <Content postData={props.state.postData}/>
+        <Content postData={props.state.postData} addPost={props.addPost}/>
         
     </div>
 }

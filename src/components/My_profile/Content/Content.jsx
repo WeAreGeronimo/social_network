@@ -20,7 +20,7 @@ const CONTENT = (props) => {
             <Contact_info />
             <Personal_info />
             <div className={_css.information_bar}>Стена<span className={_css.write_on_wall}>Написать на стене</span></div>
-            <Wall postData = {props.postData}/>
+            <Wall postData = {props.postData} addPost={props.addPost}/>
             
             
         </div>

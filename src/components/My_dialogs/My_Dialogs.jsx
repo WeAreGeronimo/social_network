@@ -12,12 +12,7 @@ const MY_DIALOGS = (props) => {
 
     let messagesArray = props.state.messagesData.map (messages => <MESSAGE_ITEM message_text={messages.text_message} message_text_time={messages.time}/>)
 
-    let refTextArea = React.createRef(); 
-    
-    let func = () => {
-        let text = refTextArea.current.value;
-        alert(text);
-    }
+
 
 
     return <div className={_css.container_dialogs}>
@@ -30,8 +25,8 @@ const MY_DIALOGS = (props) => {
         <div className={_css.container_messages}>
                 {messagesArray}
             <div className={_css.textarea_m}>
-                <textarea ref={refTextArea}></textarea>
-                <button onClick={func}>Отправить</button>
+                <textarea></textarea>
+                <button>Отправить</button>
             </div>
         </div>
     </div>
