@@ -13,7 +13,9 @@ const Wall = (props) => {
     
     let onPostChange = () => {
         let text = refTextArea.current.value;
+        console.log(props.newPostText);
         props.updateNewPostText(text);
+        
     }
 
     let addPost = () => {
