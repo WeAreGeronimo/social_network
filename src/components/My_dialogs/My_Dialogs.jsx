@@ -1,4 +1,5 @@
 import React from 'react';
+import { newMessageInDialog_actionCreater, updateDialogsMessage_actionCreater} from '../../redux/state';
 import MESSAGE_ITEM from './Messages/MessageItem';
 import _css from './My_Dialogs.module.css';
 import PERSON from './Peoples/person';
@@ -16,11 +17,17 @@ const MY_DIALOGS = (props) => {
 
     let onMessChange = () => {
         let text = refDialogArea.current.value;
-        props.updateDialogsMessage(text);
+     
+        props.dispatch(
+            updateDialogsMessage_actionCreater(text)
+        )
     }
 
     let newMessageInDialog = () => {
-        props.newMessageInDialog();
+
+        props.dispatch( 
+            newMessageInDialog_actionCreater()
+         )
          
     }
     

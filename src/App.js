@@ -18,7 +18,7 @@ import My_Audios from './components/My_audios/My_Audios';
 
 
 const App = (props) => {
-  console.log(props);
+ 
   return (
     
     <div className="grid_container">
@@ -26,8 +26,8 @@ const App = (props) => {
       <Nav />
       <div className='module'>
 
-        <Route exact path='/profile'><My_profile state={props.state.profilePage} addPost={props.addPost} updateNewPostText={props.updateNewPostText} /></Route>
-        <Route exact path='/dialogs'><My_Dialogs state={props.state.dialogPage} newMessageInDialog={props.newMessageInDialog} updateDialogsMessage={props.updateDialogsMessage}/></Route>
+        <Route exact path='/profile'><My_profile state={props.state.profilePage} dispatch={props.dispatch} /></Route>
+        <Route exact path='/dialogs'><My_Dialogs state={props.state.dialogPage} dispatch={props.dispatch}/></Route>
         <Route path='/friends' component={My_Friends} />
         <Route path='/videos' component={My_Videos} />
         <Route path='/audios' component={My_Audios} />
