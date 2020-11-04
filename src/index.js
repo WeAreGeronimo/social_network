@@ -1,17 +1,21 @@
 import * as serviceWorker from './serviceWorker';
-import state from './redux/state';
+import store from './redux/state';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import {BrowserRouter} from 'react-router-dom';
-import {addPost, updateNewPostText, newMessageInDialog, updateDialogsMessage, subscriber} from './redux/state';
+
 
 let renderEntireTree = (state) => {
     ReactDOM.render(
       <React.StrictMode>
         <BrowserRouter>
-          <App state={state} addPost={addPost} updateNewPostText={updateNewPostText} newMessageInDialog={newMessageInDialog} updateDialogsMessage={updateDialogsMessage} />
+          <App state={state}
+               addPost={store.addPost.bind(store)} 
+               updateNewPostText={store.updateNewPostText.bind(store)} 
+               newMessageInDialog={store.newMessageInDialog.bind(store)} 
+               updateDialogsMessage={store.updateDialogsMessage.bind(store)} />
         </BrowserRouter>
       </React.StrictMode>,
       document.getElementById('root')
@@ -19,9 +23,9 @@ let renderEntireTree = (state) => {
     }
 
 
-    renderEntireTree(state);
+    renderEntireTree(store.getState());
 
-subscriber(renderEntireTree);
+store.subscribe(renderEntireTree);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

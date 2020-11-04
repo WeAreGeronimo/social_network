@@ -7,11 +7,12 @@ import './my_profile.css';
 
 
 const MY_PROFILE = (props) => {
+   
     return <div className="my_profile_css">
         <Name_bar />
        
         <MiddleColumnProfile friendData ={props.state.friendData}/>
-        <Content postData={props.state.postData} addPost={props.addPost} newPostText={props.state.newPostText} updateNewPostText={props.updateNewPostText} />
+        <Content postData={props.state.postData} addPost={props.addPost} newPostText={props.newPostText} updateNewPostText={props.updateNewPostText} />
         
     </div>
 }

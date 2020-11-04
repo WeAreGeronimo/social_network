@@ -23,7 +23,7 @@ const MY_DIALOGS = (props) => {
         props.newMessageInDialog();
          
     }
-    console.log(props.state.aloneMessage);
+    
 
     return <div className={_css.container_dialogs}>
         <div className={_css.dialogs}>
