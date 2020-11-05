@@ -7,10 +7,10 @@ import './my_profile.css';
 
 
 const MY_PROFILE = (props) => {
-    
+    console.log(props);
     return <div className="my_profile_css">
         <Name_bar />
-       
+        
         <MiddleColumnProfile friendData ={props.state.friendData}/>
         <Content postData={props.state.postData} dispatch={props.dispatch} />
         

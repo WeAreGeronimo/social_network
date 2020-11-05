@@ -1,5 +1,5 @@
 import React from 'react';
-import { AddPost_actionCreater, updateNewPostText_actionCreater } from '../../../../redux/state';
+import { AddPost_Creater, updateNewPostText_Creater } from '../../../../redux/profile_reducer';
 import Post from './Posts';
 import _css from './Wall.module.css';
 
@@ -16,14 +16,14 @@ const Wall = (props) => {
         let text = refTextArea.current.value;
 
         props.dispatch(
-            updateNewPostText_actionCreater(text)
+            updateNewPostText_Creater(text)
         )
 
     }
 
     let addPost = () => {
         props.dispatch(
-            AddPost_actionCreater()
+            AddPost_Creater()
         )
 
     }
