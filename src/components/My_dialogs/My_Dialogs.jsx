@@ -1,5 +1,6 @@
 import React from 'react';
 import { newMessageInDialog_Creater, updateDialogsMessage_Creater} from '../../redux/dialogs_reducer';
+import My_Videos from '../My_videos/My_Videos';
 import MESSAGE_ITEM from './Messages/MessageItem';
 import _css from './My_Dialogs.module.css';
 import PERSON from './Peoples/person';
