@@ -8,11 +8,11 @@ import {BrowserRouter} from 'react-router-dom';
 
 
 let renderEntireTree = (state) => {
+  
   ReactDOM.render(
     <React.StrictMode>
       <BrowserRouter>
-        <App state={state}
-          dispatch={store.dispatch.bind(store)} />
+        <App state={state} dispatch={store.dispatch.bind(store)} store={store} />
       </BrowserRouter>
     </React.StrictMode>,
     document.getElementById('root')
@@ -23,8 +23,8 @@ let renderEntireTree = (state) => {
 renderEntireTree(store.getState());
 
 store.subscribe(() => {
-  let requestState = store.getState();
-  renderEntireTree(requestState);
+  let state = store.getState();
+  renderEntireTree(state);
 });
 
 // If you want your app to work offline and load faster, you can change

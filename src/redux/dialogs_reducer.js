@@ -28,8 +28,8 @@ const dialogsReducer = (state = initialState, action) => {
                 text_message: state.aloneMessage,
                 time: "давно"
             };
-            state.aloneMessage = '';
             state.messagesData.push(newMessage);
+            state.aloneMessage = '';
             
             return state;
 
