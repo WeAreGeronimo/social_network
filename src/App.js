@@ -25,8 +25,8 @@ const App = (props) => {
       <Nav />
       <div className='module'>
 
-        <Route exact path='/profile'><My_profile store={props.store} /></Route>
-        <Route exact path='/dialogs'><My_dialogs_container store={props.store}/></Route>
+        <Route exact path='/profile'><My_profile /></Route>
+        <Route exact path='/dialogs'><My_dialogs_container /></Route>
         <Route path='/friends' component={My_Friends} />
         <Route path='/videos' component={My_Videos} />
         <Route path='/audios' component={My_Audios} />

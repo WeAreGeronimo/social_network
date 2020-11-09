@@ -5,6 +5,7 @@ import RatingBar from './Rating/Rating';
 
 
 const MiddleColumnProfile = (props) => {
+   
     return <div className={_css.Profile_info}>
         <div className={_css.middle_bar}>
             <div className={_css.profile_photo}><img src="https://miro.medium.com/max/11730/0*ihTZPO4iffJ8n69_" /></div>
