@@ -7,8 +7,7 @@ import _css from './My_Dialogs.module.css';
 
 const MY_DIALOGS = (props) => {
     let refDialogArea = React.createRef();
-    let dialogsArray = props.dialogsArray;
-
+let dialogsArray = props.dialogsArray;
     let onMessChange = () => {
         let text = refDialogArea.current.value;
         props.onMessChange(text)

@@ -4,8 +4,8 @@ import FriendItem from './Peoples/Friend_item';
 
 
 
-const FriendsContainer = (props) => {
-    let friend_item = props.friendData.map(data => <FriendItem name={data.name} surname={data.surname}/>)
+const Friends = (props) => {
+    let friend_item = props.friendData.map(data => <FriendItem name={data.name} key={data.id} surname={data.surname}/>)
     return <div className="friends_container">
         <div className={_css.blue_bar}>Друзья</div>
         <div className={_css.grey_bar}>
@@ -18,4 +18,4 @@ const FriendsContainer = (props) => {
     </div>
 }
 
-export default FriendsContainer; 
+export default Friends; 

@@ -23,25 +23,26 @@ newPostText: '',
 
 
 const profileReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case ADD_POST:
-            let newPost = {
-                id: 4,
-                name: "Егор почти Крид",
-                text_post: state.newPostText,
-                time: "13:31",
-                likes_q: 0,
-            };
-            state.postData.push(newPost);
-            state.newPostText = '';
-            return state;
+  switch (action.type) {
+    case ADD_POST: {
+      let timeNow = new Date().toLocaleTimeString().slice(0, -3);
+      return {
+        ...state,
+        postData: [...state.postData, { id: 4, name: "Егор почти Крид", text_post: state.newPostText, time: "сегодня в " + timeNow, likes_q: 0, }],
+        newPostText: "",
+      };
 
-        case UPDATE_NEW_POST_TEXT:
-            state.newPostText = action.newText;
-            return state;
-
-        default: return state;
     }
+
+    case UPDATE_NEW_POST_TEXT: {
+      return {
+        ...state,
+        newPostText: action.newText
+      };
+
+    }
+    default: return state;
+  }
 
 }
 

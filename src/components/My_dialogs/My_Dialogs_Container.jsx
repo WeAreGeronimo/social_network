@@ -1,6 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { newMessageInDialog_Creater, updateDialogsMessage_Creater} from '../../redux/dialogs_reducer';
-import StoreContext from '../../StoreContext';
 import MESSAGE_ITEM from './Messages/MessageItem';
 import MY_DIALOGS from './My_Dialogs';
 import PERSON from './Peoples/person';
@@ -9,36 +9,27 @@ import PERSON from './Peoples/person';
 
 
 
-const My_dialogs_container = (props) => (
-
-    <StoreContext.Consumer>
-        {
-            (store) => {
-                let dialogsArray = store.getState().dialogPage.dialogsData.map ( dialogs => <PERSON name={dialogs.name} text={dialogs.text} id={dialogs.id}/> )
-                let messagesArray = store.getState().dialogPage.messagesData.map (messages => <MESSAGE_ITEM message_text={messages.text_message} message_text_time={messages.time}/>)
-            
-                let onMessChange = (text) => {
-                    store.dispatch(
-                        updateDialogsMessage_Creater(text)
-                    )
-                }
-            
-                let newMessageInDialog = () => {
-                    store.dispatch( 
-                        newMessageInDialog_Creater()
-                     )
-                }
-
-                return (
-                <MY_DIALOGS
-                    onMessChange={onMessChange}
-                    value={store.getState().dialogPage.dialogsData.aloneMessage}
-                    newMessageInDialog={newMessageInDialog} dialogsArray={dialogsArray}
-                    messagesArray={messagesArray} />)
-            }
-        }
-    </StoreContext.Consumer>
+const mapStateToProps = (state) => {
+    return{
+        dialogPage: state.dialogPage,
+        value: state.dialogPage.aloneMessage,
+        messagesArray: state.dialogPage.messagesData.map(messages => <MESSAGE_ITEM message_text={messages.text_message} key={messages.id} message_text_time={messages.time} />),
+        dialogsArray: state.dialogPage.dialogsData.map(dialogs => <PERSON name={dialogs.name} text={dialogs.text} key={dialogs.id} id={dialogs.id} />),
         
-)
+    }
+}
 
-export default My_dialogs_container; 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onMessChange: (text) => {
+            dispatch(updateDialogsMessage_Creater(text))
+        },
+        newMessageInDialog: () => {
+            dispatch(newMessageInDialog_Creater())
+        },
+    }
+}
+
+const My_Dialogs_Container = connect(mapStateToProps, mapDispatchToProps)(MY_DIALOGS);
+
+export default My_Dialogs_Container; 

@@ -1,5 +1,5 @@
 import React from 'react';
-import FriendsContainer from './Friends/Friends';
+import FriendsContainer from './Friends/Friends_container';
 import _css from './middle_column_Profile.module.css';
 import RatingBar from './Rating/Rating';
 
@@ -12,7 +12,7 @@ const MiddleColumnProfile = (props) => {
             <div className={_css.photo_with_me}><a href="#s">Фотографии со мной</a></div>
             <div className={_css.videos_with_me}><a href="#s">Видеозаписи со мной</a></div>
             <RatingBar lvl={88} />
-            <FriendsContainer friendData={props.friendData} />
+            <FriendsContainer />
             
 
         </div>

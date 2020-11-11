@@ -17,25 +17,29 @@ let initialState = {
     { id: 4, text_message: "ведь реакт для этого и создан)", time: "20:51:34" },
     { id: 5, text_message: "holder", time: "давно" },
   ],
-  aloneMessage: "123",
+  aloneMessage: "",
 }
 
 const dialogsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case NEW_MESSAGE_IN_DIALOG:
-            let newMessage = {
-                id: 5,
-                text_message: state.aloneMessage,
-                time: "давно"
-            };
-            state.messagesData.push(newMessage);
-            state.aloneMessage = '';
-            
-            return state;
+        case NEW_MESSAGE_IN_DIALOG: {
 
-        case UPDATE_DIALOGS_MESSAGE:
-            state.aloneMessage = action.newTextM;
-            return state;
+      
+          let timeNow = new Date().toLocaleTimeString();
+            return {
+              ...state,
+              messagesData: [...state.messagesData, {id: 5, text_message: state.aloneMessage, time: timeNow} ],
+              aloneMessage: "",
+            };
+          }
+
+        case UPDATE_DIALOGS_MESSAGE: {
+          
+            return {...state,
+              aloneMessage: action.newTextM,
+            };
+
+          }
 
         default: return state;
     }

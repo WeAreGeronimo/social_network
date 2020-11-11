@@ -6,8 +6,9 @@ import _css from './Wall.module.css';
 
 
 const Wall = (props) => {
-   
-    let NewPost_el = props.postData.map(post_information => <Post name_surname={post_information.name} when_time={post_information.time} message={post_information.text_post} likes_count={post_information.likes_q} />)
+    
+
+    let NewPost_el = props.postData.map(post_information => <Post name_surname={post_information.name} when_time={post_information.time} message={post_information.text_post} key={post_information.id} likes_count={post_information.likes_q} />)
 
     let refTextArea = React.createRef();
 
