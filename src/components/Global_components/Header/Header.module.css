@@ -3,6 +3,9 @@
     align-items: center;
     border-radius: 0px 0px 10px 10px;
     grid-area: header;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 46px;
 
   }
   
@@ -11,5 +14,15 @@
     height: 40px;
     padding-left: 20px;
    
+  }
+ 
+  .users {
+    grid-column: 4/5;
+    justify-self: center
+  }
+
+  .users a {
+    color: white;
+
   }
 

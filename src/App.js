@@ -8,6 +8,7 @@ import My_Friends from './components/My_friends/My_Friends';
 import My_Videos from './components/My_videos/My_Videos';
 import My_Audios from './components/My_audios/My_Audios';
 import My_dialogs_container from './components/My_dialogs/My_Dialogs_Container';
+import Users_container from './components/Users/Users_container';
 
 
 
@@ -30,6 +31,7 @@ const App = (props) => {
         <Route path='/friends' component={My_Friends} />
         <Route path='/videos' component={My_Videos} />
         <Route path='/audios' component={My_Audios} />
+        <Route exact path='/users'><Users_container /></Route>
 
 
       </div>

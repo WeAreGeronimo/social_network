@@ -16,7 +16,7 @@ const MiddleColumnProfile = (props) => {
             
 
         </div>
-        
+
     </div>
 }
 
