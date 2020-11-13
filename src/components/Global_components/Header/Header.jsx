@@ -1,6 +1,5 @@
 import React from 'react';
-import { NavLink, Route } from 'react-router-dom';
-import Users from '../../Users/Users';
+import { NavLink } from 'react-router-dom';
 import _css from './Header.module.css';
 
 

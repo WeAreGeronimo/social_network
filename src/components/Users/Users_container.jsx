@@ -1,11 +1,10 @@
-
 import { connect } from 'react-redux';
 import { setUsers_AC, toggleFollow_AC } from '../../redux/users_reducer';
 import Users from './Users';
 
 let mapStateToProps = (state) => {
     return {
-        
+
         users: state.usersPage.users
     }
 }
