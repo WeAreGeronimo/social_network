@@ -18,7 +18,7 @@ import Users_container from './components/Users/Users_container';
 
 
 
-const App = (props) => {
+const App = () => {
   return (
    
     <div className="grid_container">

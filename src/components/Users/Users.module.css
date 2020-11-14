@@ -8,3 +8,7 @@
     width: 98%;
     height: 15px;
 }
+
+.selectedPage {
+    font-weight: 700;
+}

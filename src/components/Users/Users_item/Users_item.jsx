@@ -6,11 +6,11 @@ const Users_item = (props) => {
 
     return (<div className={_css.item}>
         <div className={_css.avatar_block}>
-            <div className={_css.avatar}><img src={props.large != null ? props.large : noAvatar} /></div>
+            <div className={_css.avatar}><img  alt=""  src={props.large != null ? props.large : noAvatar} /></div>
             <div className={_css.rating}>{props.rating}</div>
         </div>
         <div className={_css.information_block}>
-    <div className={_css.name_surname_age}><a href="">{props.name} {props.surname}</a>, props.age</div>
+    <div className={_css.name_surname_age}><a href="#s"  alt="" >{props.name} {props.surname}</a>, props.age</div>
     <div className={_css.location}>props.city, props.country</div>
             <div className={_css.status}>{props.status}</div>
             <div className={_css.add}>{ 
