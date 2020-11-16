@@ -1,19 +1,23 @@
 import React from 'react';
 import Content from './Content/Content';
-import Name_bar from './Name_bar/Name_bar';
+import NameBar from './Name_bar/NameBar';
 import MiddleColumnProfile from './middle_column_Profile/middle_column_Profile';
 import './my_profile.css';
+import Preloader from '../Global_components/preloader/Preloader';
 
 
 
-const MY_PROFILE = (props) => {
-
+const MyProfile = (props) => {
+    if(!props.profile) {
+        return <Preloader />
+    }
     return <div className="my_profile_css">
-        <Name_bar />
-        <MiddleColumnProfile />
-        <Content />
+        
+        <NameBar />
+        <MiddleColumnProfile profile={props.profile} />
+        <Content profile={props.profile} />
 
     </div>
 }
 
-export default MY_PROFILE;
+export default MyProfile;

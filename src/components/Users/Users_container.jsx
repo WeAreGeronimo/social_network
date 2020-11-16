@@ -40,7 +40,8 @@ class UsersAPIComponent extends React.Component {
                 currentPage={this.props.currentPage}
                 pageSize={this.props.pageSize}
                 pageChanger={this.pageChanger} 
-                isFetching={this.props.isFetching}/>
+                isFetching={this.props.isFetching}
+                toggle_follow={this.props.toggle_follow}/>
         )
     }
 }

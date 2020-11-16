@@ -1,12 +1,18 @@
 import React from 'react';
 import _css from './Users_item.module.css';
 import noAvatar from "../../../assets/no_avatar.jpg"
+import { NavLink } from 'react-router-dom';
 
 const Users_item = (props) => {
 
     return (<div className={_css.item}>
         <div className={_css.avatar_block}>
-            <div className={_css.avatar}><img  alt=""  src={props.large != null ? props.large : noAvatar} /></div>
+            <div className={_css.avatar}>
+                <NavLink to={'/profile/'+ props.id}>
+                <img  alt=""  src={props.large != null ? props.large : noAvatar} />
+                </NavLink>
+                </div>
+                
             <div className={_css.rating}>{props.rating}</div>
         </div>
         <div className={_css.information_block}>

@@ -7,6 +7,7 @@ const SET_USER_TOTAL_COUNT = 'SET_USER_TOTAL_COUNT';
 const TOGGLE_FETCHING = 'TOGGLE_FETCHING';
 
 
+
 const initialState = {
   users: [],
   pageSize: 5,
@@ -45,7 +46,6 @@ const usersReducer = (state = initialState, action) => {
       return {...state, isFetching: action.isFetching}
     }
 
-
     default: return state;
   }
 }
@@ -55,6 +55,7 @@ export const setUsers = (users) => ({ type: SET_USERS, users })
 export const setCurrPage = (currentPage) => ({ type: SET_CURR_PAGE, currentPage })
 export const setTotalUsersCount = (totalUsersCount) => ({ type: SET_USER_TOTAL_COUNT, totalUsersCount })
 export const toggleFetching = (isFetching) => ({ type: TOGGLE_FETCHING, isFetching })
+
 
 
 

@@ -2,6 +2,7 @@ import React from "react";
 import Preloader from "../Global_components/preloader/Preloader";
 import _css from './Users.module.css';
 import UsersItem from './Users_item/Users_item';
+import t from './../../assets/loader_sn.svg'
 
 
 
@@ -15,7 +16,8 @@ let Users = (props) => {
         // country={u.location.country} 
         status={u.status} age={u.age}
         rating={u.rating}
-        large={u.photos.large} />)
+        large={u.photos.large}
+         />)
 
         let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
         
@@ -50,6 +52,7 @@ let Users = (props) => {
         })}
 
         {props.isFetching ? <Preloader /> : null}
+
 
         {Users_list}
 
