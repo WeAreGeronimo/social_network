@@ -3,15 +3,16 @@
 const SET_CURR_PAGE = 'SET_CURR_PAGE';
 const SET_USERS = 'SET_USERS';
 const TOGGLE_FOLLOW = 'TOGGLE_FOLLOW';
-const SET_USER_TOTAL_COUNT = 'SET_USER TOTAL_COUNT';
-const WHATS_PAGE_ARE_SHOW = "WHATS_PAGE_ARE_SHOW";
+const SET_USER_TOTAL_COUNT = 'SET_USER_TOTAL_COUNT';
+const TOGGLE_FETCHING = 'TOGGLE_FETCHING';
+
 
 const initialState = {
   users: [],
   pageSize: 5,
   totalUsersCount: 0,
   currentPage: 1,
-  whatsPageAreShow: 5,
+  isFetching: true,
 
 }
 
@@ -40,18 +41,21 @@ const usersReducer = (state = initialState, action) => {
       return { ...state, totalUsersCount: action.totalUsersCount}
     }
 
-    case WHATS_PAGE_ARE_SHOW: {
-      return { ...state, whatsPageAreShow: action.whatsPageAreShow}
+    case TOGGLE_FETCHING: {
+      return {...state, isFetching: action.isFetching}
     }
+
+
     default: return state;
   }
 }
 
-export const toggleFollow_AC = (userId) => ({ type: TOGGLE_FOLLOW, userId })
-export const setUsers_AC = (users) => ({ type: SET_USERS, users })
-export const setCurrentPage_AC = (currentPage) => ({ type: SET_CURR_PAGE, currentPage })
-export const setTotalUsersCount_AC = (totalUsersCount) => ({ type: SET_USER_TOTAL_COUNT, totalUsersCount })
-export const setPagesCount_AC = (whatsPageAreShow) => ({ type: WHATS_PAGE_ARE_SHOW, whatsPageAreShow })
+export const toggle_follow = (userId) => ({ type: TOGGLE_FOLLOW, userId })
+export const setUsers = (users) => ({ type: SET_USERS, users })
+export const setCurrPage = (currentPage) => ({ type: SET_CURR_PAGE, currentPage })
+export const setTotalUsersCount = (totalUsersCount) => ({ type: SET_USER_TOTAL_COUNT, totalUsersCount })
+export const toggleFetching = (isFetching) => ({ type: TOGGLE_FETCHING, isFetching })
+
 
 
 
