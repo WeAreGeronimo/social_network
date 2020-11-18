@@ -26,3 +26,14 @@
 
   }
 
+  .login {
+    grid-column: 3/4;
+    grid-row: 1/2;
+    justify-self: center
+  }
+
+  .login a {
+    color: white;
+
+  }
+

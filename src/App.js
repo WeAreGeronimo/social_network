@@ -9,6 +9,8 @@ import My_Audios from './components/My_audios/My_Audios';
 import My_dialogs_container from './components/My_dialogs/My_Dialogs_Container';
 import Users_container from './components/Users/Users_container';
 import ProfileContainer from './components/My_profile/ProfileContainer';
+import HeaderContainer from './components/Global_components/Header/HeaderContainer';
+import HeaderAPIComponent from './components/Global_components/Header/HeaderContainer';
 
 
 
@@ -22,11 +24,11 @@ const App = () => {
   return (
    
     <div className="grid_container">
-      <Header />
+      <HeaderAPIComponent />
       <Nav />
       <div className='module'>
 
-        <Route path='/profile/'><ProfileContainer /></Route>
+        <Route path='/profile/:userId?'><ProfileContainer /></Route>
         <Route exact path='/dialogs'><My_dialogs_container /></Route>
         <Route path='/friends' component={My_Friends} />
         <Route path='/videos' component={My_Videos} />

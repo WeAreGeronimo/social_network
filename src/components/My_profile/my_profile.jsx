@@ -13,7 +13,7 @@ const MyProfile = (props) => {
     }
     return <div className="my_profile_css">
         
-        <NameBar />
+        <NameBar profile={props.profile} />
         <MiddleColumnProfile profile={props.profile} />
         <Content profile={props.profile} />
 
