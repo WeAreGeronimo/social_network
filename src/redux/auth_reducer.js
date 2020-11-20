@@ -1,3 +1,6 @@
+import { headerAPI } from "../components/api/api";
+import { toggleFetching } from "./users_reducer";
+
 const SET_USER_DATA = "SET_USER_DATA";
 
 
@@ -26,6 +29,19 @@ const authReducer = (state = initialState, action) => {
 }
 
 export const setAuthUserData = (userId, email, login) => ({ type: SET_USER_DATA, data: {userId, email, login}});
+
+export const setAuth = () => {
+  return (dispatch) => {
+    dispatch(toggleFetching(true));
+    headerAPI.getAuth().then(response => {
+      if (response.resultCode === 0) {
+        dispatch(toggleFetching(false));
+        let { id, email, login } = response.data
+        dispatch(setAuthUserData(id, email, login,));
+      }
+    })
+  }
+}
 
 
 

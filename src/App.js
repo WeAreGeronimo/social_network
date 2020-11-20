@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import Header from './components/Global_components/Header/Header';
 import Nav from './components/Global_components/Nav/Nav';
 import {Route} from 'react-router-dom';
 import My_Friends from './components/My_friends/My_Friends';
@@ -9,7 +8,6 @@ import My_Audios from './components/My_audios/My_Audios';
 import My_dialogs_container from './components/My_dialogs/My_Dialogs_Container';
 import Users_container from './components/Users/Users_container';
 import ProfileContainer from './components/My_profile/ProfileContainer';
-import HeaderContainer from './components/Global_components/Header/HeaderContainer';
 import HeaderAPIComponent from './components/Global_components/Header/HeaderContainer';
 
 

@@ -1,5 +1,6 @@
 import * as axios from 'axios';
-
+const FOLLOW = "FOLLOW";
+const UNFOLLOW = 'UNFOLLOW'
 const BASE_URL = "https://social-network.samuraijs.com/api/1.0/";
 
 let instance = axios.create({
@@ -13,17 +14,30 @@ let instance = axios.create({
 export const usersAPI = {
     getUsers(currentPage = 1, pageSize = 5) {
         return instance.get(`users?page=${currentPage}&count=${pageSize}`).then(response => response.data)
+    },
+
+    F_UNF_User_toggle(id = 1, type) {
+        switch (type) {
+            case FOLLOW: {
+                return instance.post(`follow/${id}`).then(response => response.data)
+            }
+            case UNFOLLOW: {
+                return instance.delete(`follow/${id}`).then(response => response.data)
+            }
+            default: return
+        }
     }
 }
 
-
-export const F_UNF_User_toggle = (id = 1, type) => {
-
-    if (type === 1) {
-        return instance.post(`follow/${id}`).then(response => response.data)
-    } else if (type === 0) {
-        return instance.delete(`follow/${id}`).then(response => response.data)
+export const headerAPI = {
+    getAuth() {
+        return instance.get(`auth/me`).then(response => response.data)
+       
     }
-
 }
 
+export const profilerAPI = {
+    getProfile(userId) {
+        return instance.get(`profile/`+userId).then(response => response)
+    }
+}

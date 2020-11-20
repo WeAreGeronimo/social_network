@@ -18,7 +18,7 @@ let Users = (props) => {
         large={u.photos.large}
         followed={u.followed}
         followingInProgress={props.followingInProgress}
-        toggleIsFollowedProgress={props.toggleIsFollowedProgress}
+        followUnfollow={props.followUnfollow}
          />)
 
         // let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
