@@ -36,7 +36,7 @@ export const headerAPI = {
     }
 }
 
-export const profilerAPI = {
+export const profileAPI = {
     getProfile(userId) {
         return instance.get(`profile/`+userId).then(response => response)
     }

@@ -9,6 +9,7 @@ import My_dialogs_container from './components/My_dialogs/My_Dialogs_Container';
 import Users_container from './components/Users/Users_container';
 import ProfileContainer from './components/My_profile/ProfileContainer';
 import HeaderAPIComponent from './components/Global_components/Header/HeaderContainer';
+import Login from './components/Login/Login';
 
 
 
@@ -32,6 +33,7 @@ const App = () => {
         <Route path='/videos' component={My_Videos} />
         <Route path='/audios' component={My_Audios} />
         <Route exact path='/users'><Users_container /></Route>
+        <Route exact path='/login'><Login /></Route>
 
 
       </div>

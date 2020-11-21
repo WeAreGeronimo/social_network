@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import _css from './My_Dialogs.module.css';
 
 
@@ -13,6 +14,9 @@ let dialogsArray = props.dialogsArray;
         props.onMessChange(text)
     }
 
+    if(props.isAuth === false) {
+      return <Redirect to={'/login'}/>;
+    }
 
     return <div className={_css.container_dialogs}>
         <div className={_css.dialogs}>

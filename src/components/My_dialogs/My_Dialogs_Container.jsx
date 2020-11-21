@@ -15,7 +15,7 @@ const mapStateToProps = (state) => {
         value: state.dialogPage.aloneMessage,
         messagesArray: state.dialogPage.messagesData.map(messages => <MESSAGE_ITEM message_text={messages.text_message} key={messages.id} message_text_time={messages.time} />),
         dialogsArray: state.dialogPage.dialogsData.map(dialogs => <PERSON name={dialogs.name} text={dialogs.text} key={dialogs.id} id={dialogs.id} />),
-        
+        isAuth: state.auth.isAuth,
     }
 }
 
