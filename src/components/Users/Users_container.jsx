@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { compose } from 'redux';
 import { toggle_follow, setCurrPage, toggleIsFollowedProgress, getUsers, followUnfollow} from '../../redux/users_reducer';
+import { withAuthRedirect } from '../HOC/withAuthRedirect';
 import Users from './Users';
 
 
@@ -22,9 +24,6 @@ class UsersAPIComponent extends React.Component {
     
     render() {
 
-        if(this.props.isAuth === false) {
-            return <Redirect to={'/login'}/>;
-          }
       
         return ( 
             
@@ -42,6 +41,7 @@ class UsersAPIComponent extends React.Component {
     }
 }
 
+
 let mapStateToProps = (state) => {
     return {
         
@@ -56,11 +56,8 @@ let mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {
-    toggle_follow,
-    setCurrPage,
-    toggleIsFollowedProgress,
-    getUsers,
-    followUnfollow
-})(UsersAPIComponent);
 
+export default compose(
+    connect(mapStateToProps, {toggle_follow,setCurrPage,toggleIsFollowedProgress,getUsers,followUnfollow}),
+    withAuthRedirect
+)(UsersAPIComponent)

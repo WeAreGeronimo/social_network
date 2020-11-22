@@ -4,14 +4,12 @@ import NameBar from './Name_bar/NameBar';
 import MiddleColumnProfile from './middle_column_Profile/middle_column_Profile';
 import './my_profile.css';
 import Preloader from '../Global_components/preloader/Preloader';
-import { Redirect } from 'react-router-dom';
+
 
 
 
 const MyProfile = (props) => {
-    if(props.isAuth === false) {
-        return <Redirect to={'/login'}/>;
-      }
+
 
     if(!props.profile) {
         return <Preloader />

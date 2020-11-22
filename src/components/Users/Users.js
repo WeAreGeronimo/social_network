@@ -1,5 +1,4 @@
 import React from "react";
-import { Redirect } from "react-router-dom";
 import Preloader from "../Global_components/preloader/Preloader";
 import _css from './Users.module.css';
 import UsersItem from './Users_item/Users_item';
