@@ -1,0 +1,18 @@
+  
+.statusWrapper {
+    border-bottom: 1px solid rgba(156, 156, 156, 0.4);
+    width: 97%;
+    margin-bottom: 15px;
+    margin-left: 10px;
+}
+  
+  .timer_status {
+    color: #9d9d9d;
+    margin-top: 4px;
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+
+  .status input {
+      border: none;
+  }

@@ -18,7 +18,7 @@ const MyProfile = (props) => {
         
         <NameBar profile={props.profile} />
         <MiddleColumnProfile profile={props.profile} />
-        <Content profile={props.profile} />
+        <Content profile={props.profile} {...props} />
 
     </div>
 }

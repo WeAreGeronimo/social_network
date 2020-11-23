@@ -14,10 +14,12 @@ class ProfileContainer extends React.Component {
     componentDidMount() {
         let userId = this.props.match.params.userId
         if(!userId) {userId = 12604}
-        this.props.getUserProfile(userId);
+
+        this.props.getUserProfile(userId)
     }
 
     render() {
+      
        return <MyProfile {...this.props} profile={this.props.profile} />
     }
 }
