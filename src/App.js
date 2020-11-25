@@ -28,7 +28,7 @@ const App = () => {
       <div className='module'>
 
         <Route path='/profile/:userId?'><ProfileContainer /></Route>
-        <Route exact path='/dialogs'><My_dialogs_container /></Route>
+        <Route path='/dialogs'><My_dialogs_container /></Route>
         <Route path='/friends' component={My_Friends} />
         <Route path='/videos' component={My_Videos} />
         <Route path='/audios' component={My_Audios} />

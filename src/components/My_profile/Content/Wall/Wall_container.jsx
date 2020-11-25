@@ -1,17 +1,19 @@
 
 import { connect } from 'react-redux';
-import { addPost, updateNewPostText } from '../../../../redux/profile_reducer';
+import { addPost} from '../../../../redux/profile_reducer';
 import Wall from './Wall';
 
 
-let mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
+
     return {
         postData: state.profilePage.postData,
-        newPostText: state.profilePage.newPostText,
+        
+        
     }
 }
 
 
-const Wall_container = connect(mapStateToProps, {addPost, updateNewPostText })(Wall);
+const Wall_container = connect(mapStateToProps, {addPost})(Wall);
 
 export default Wall_container; 

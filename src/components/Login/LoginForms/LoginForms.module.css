@@ -1,0 +1,38 @@
+.wrapper_input {
+    display: grid;
+    grid-template-columns: 0.8fr 0.9fr 1.3fr;
+    grid-template-rows: 1fr;
+    
+}
+
+.input_form {
+    grid-column: 2/3;
+    justify-self: center;
+    
+    
+}
+
+.error {
+    grid-column: 3/4;
+    padding-top: 8px;
+
+}
+
+.error span {
+color: grey;
+
+}
+
+
+.input_form span {
+    color: grey;
+}
+
+.email_span {
+    margin-right: 5px;
+    margin-left: 8px;
+}
+
+.pass_span {
+    margin-right: 5px;
+}

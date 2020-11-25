@@ -1,0 +1,87 @@
+.wrapper_login {
+    border: 1px solid #e4eaef;
+    margin-right: 12px;
+    display: grid;
+    grid-template-rows: 1fr 4fr;
+    grid-template-columns: 1fr;
+    
+}
+
+.wrapper_for_RdxFrm {
+    grid-row: 2/3;
+    grid-column: 1/2;
+
+
+}
+
+.form {
+   
+}
+
+
+
+
+.for_input_email input {
+    border: 1px solid #e4eaef;
+    width: 200px;
+    height: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    
+}
+
+.for_input_pass input {
+    border: 1px solid #e4eaef;
+    width: 200px;
+    height: 20px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    
+}
+
+
+.checkbox {
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+grid-auto-rows: 1fr;
+
+}
+
+.remember {
+    grid-column: 2/3;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+.register {
+
+    width: 120px;
+    height: 30px;
+    color: white;
+    border: 0;
+    background-color:  #4c75a3;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin-right: 10px;
+}
+
+.enter {
+    width: 80px;
+    height: 30px;
+    color: white;
+    border: 0;
+    background-color:  #4c75a3;
+    border-radius: 4px;
+    margin-right: 10px; 
+}
+
+
+
+.enter_register_div {
+    grid-column: 2/3;
+    margin: 12px 0px
+}

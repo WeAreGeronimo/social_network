@@ -1,8 +1,7 @@
 import React from 'react';
-import './my_profile.css';
 import MyProfile from './my_profile';
 import { connect } from 'react-redux';
-import {addPost, updateNewPostText, getUserProfile} from './../../redux/profile_reducer'
+import {addPost, getUserProfile} from './../../redux/profile_reducer'
 import { withRouter } from 'react-router-dom';
 import { withAuthRedirect } from '../HOC/withAuthRedirect';
 import { compose } from 'redux';
@@ -32,7 +31,7 @@ let mapStateToProps = (state) => ({
 
 
 export default compose(
-    connect(mapStateToProps, {addPost,updateNewPostText,getUserProfile}),
+    connect(mapStateToProps, {addPost,getUserProfile}),
     withRouter,
     withAuthRedirect,
 )(ProfileContainer)

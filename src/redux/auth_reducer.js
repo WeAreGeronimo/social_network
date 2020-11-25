@@ -1,4 +1,5 @@
-import { headerAPI } from "../components/api/api";
+import { Redirect } from "react-router-dom";
+import { headerAPI, loginAPI } from "../components/api/api";
 import { toggleFetching } from "./users_reducer";
 
 const SET_USER_DATA = "SET_USER_DATA";
@@ -38,6 +39,24 @@ export const setAuth = () => {
         dispatch(toggleFetching(false));
         let { id, email, login } = response.data
         dispatch(setAuthUserData(id, email, login,));
+      }
+    })
+  }
+}
+
+export const setAuthFromLogin = (email, password, rememberMe) => {
+  return (dispatch) => {
+    dispatch(toggleFetching(true));
+    loginAPI.login(email, password, rememberMe).then(response => {
+      if (response.data.resultCode === 0) {
+        headerAPI.getAuth().then(response => {
+          if (response.resultCode === 0) {
+            dispatch(toggleFetching(false));
+            let { id, email, login } = response.data
+            dispatch(setAuthUserData(id, email, login,));
+
+          }
+        })
       }
     })
   }

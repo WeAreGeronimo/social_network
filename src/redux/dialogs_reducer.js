@@ -1,4 +1,4 @@
-const UPDATE_DIALOGS_MESSAGE = "UPDATE-DIALOGS-MESSAGE";
+
 const NEW_MESSAGE_IN_DIALOG = "NEW-MESSAGE-IN-DIALOG";
 
 let initialState = {
@@ -17,7 +17,6 @@ let initialState = {
     { id: 4, text_message: "ведь реакт для этого и создан)", time: "20:51:34" },
     { id: 5, text_message: "holder", time: "давно" },
   ],
-  aloneMessage: "",
 }
 
 const dialogsReducer = (state = initialState, action) => {
@@ -28,37 +27,18 @@ const dialogsReducer = (state = initialState, action) => {
           let timeNow = new Date().toLocaleTimeString();
             return {
               ...state,
-              messagesData: [...state.messagesData, {id: 5, text_message: state.aloneMessage, time: timeNow} ],
-              aloneMessage: "",
+              messagesData: [...state.messagesData, {id: 5, text_message: action.newMessage, time: timeNow} ],
+              
             };
           }
 
-        case UPDATE_DIALOGS_MESSAGE: {
-          
-            return {...state,
-              aloneMessage: action.newTextM,
-            };
-
-          }
 
         default: return state;
     }
 
-
-
 }
 
-export const updateDialogsMessage_Creater = (text) => {
-    return {
-      type: UPDATE_DIALOGS_MESSAGE,
-      newTextM: text,
-    }
-  }
-  
-export const newMessageInDialog_Creater = () => {
-    return {
-      type: NEW_MESSAGE_IN_DIALOG,
-    }
-  }
+// export const newMessageInDialog = (newMessage) => {return { type: NEW_MESSAGE_IN_DIALOG, newMessage}}
+export const newMessageInDialog = (newMessage) => ({ type: NEW_MESSAGE_IN_DIALOG, newMessage })
 
 export default dialogsReducer;
