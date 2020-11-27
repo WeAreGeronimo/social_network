@@ -59,6 +59,10 @@ export const loginAPI = {
             password: passData,
             rememberMe: remember
         })
+    },
+
+    logout(){
+        return instance.post(`auth/logout`)
     }
 
 }

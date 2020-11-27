@@ -1,16 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import HEADER from './Header';
-import {setAuth} from './../../../redux/auth_reducer'
+import {log_out} from './../../../redux/auth_reducer'
 
 
 
 
 class HeaderAPIComponent extends React.Component {
 
-    componentDidMount() {
-        this.props.setAuth()
-    }
 
     render() {
         return <HEADER {...this.props} />
@@ -28,8 +25,7 @@ let mapStateToProps = (state) => ({
 
 
 
-export default connect(mapStateToProps, {
-    setAuth,
+export default connect(mapStateToProps, {log_out
 
 })(HeaderAPIComponent);
 

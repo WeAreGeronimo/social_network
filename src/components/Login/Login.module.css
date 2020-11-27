@@ -2,23 +2,17 @@
     border: 1px solid #e4eaef;
     margin-right: 12px;
     display: grid;
-    grid-template-rows: 1fr 4fr;
+    grid-template-rows: 1fr 4fr 1fr;
     grid-template-columns: 1fr;
     
 }
 
 .wrapper_for_RdxFrm {
-    grid-row: 2/3;
+    
     grid-column: 1/2;
 
 
 }
-
-.form {
-   
-}
-
-
 
 
 .for_input_email input {
@@ -84,4 +78,22 @@ grid-auto-rows: 1fr;
 .enter_register_div {
     grid-column: 2/3;
     margin: 12px 0px
+}
+
+.error {
+    display: grid;
+    margin-bottom: 5px;
+    justify-items: center;
+}
+
+.error span {
+    display: flex;
+    background-color: rgba(255, 51, 71, 0.3);
+    border-radius: 4px;
+    min-width: 100px;
+    justify-content: center;
+    margin-right: 100px;
+    padding: 5px 50px;
+    color: black;
+    border: 1px solid #e4eaef;
 }

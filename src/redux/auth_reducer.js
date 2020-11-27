@@ -1,4 +1,5 @@
 import { Redirect } from "react-router-dom";
+import { stopSubmit } from "redux-form";
 import { headerAPI, loginAPI } from "../components/api/api";
 import { toggleFetching } from "./users_reducer";
 
@@ -29,38 +30,47 @@ const authReducer = (state = initialState, action) => {
   }
 }
 
-export const setAuthUserData = (userId, email, login) => ({ type: SET_USER_DATA, data: {userId, email, login}});
+export const setAuthUserData = (userId, email, login, isAuth) => ({ type: SET_USER_DATA, data: { userId, email, login, isAuth } });
 
-export const setAuth = () => {
+
+export const setAuth = () => (dispatch) => {
+  dispatch(toggleFetching(true));
+  return headerAPI.getAuth().then(response => {
+    if (response.resultCode === 0) {
+      dispatch(toggleFetching(false));
+      let { id, email, login } = response.data
+      dispatch(setAuthUserData(id, email, login, true));
+    }
+  })
+}
+
+
+
+export const setAuthFromLogin = (email, password, rememberMe) => (dispatch) => {
+  dispatch(toggleFetching(true));
+  loginAPI.login(email, password, rememberMe, true).then(response => {
+    if (response.data.resultCode === 0) {
+      dispatch(setAuth())
+    } else {
+      let message = response.data.messages.length > 0 ? response.data.messages[0] : 'Что-то пошло не так...';
+      dispatch(stopSubmit('loginForm', { _error: message }));
+    }
+  })
+}
+
+
+export const log_out = () => {
   return (dispatch) => {
     dispatch(toggleFetching(true));
-    headerAPI.getAuth().then(response => {
+    loginAPI.logout().then(response => {
       if (response.resultCode === 0) {
         dispatch(toggleFetching(false));
-        let { id, email, login } = response.data
-        dispatch(setAuthUserData(id, email, login,));
+        dispatch(setAuthUserData(null, null, null, false))
       }
     })
   }
 }
 
-export const setAuthFromLogin = (email, password, rememberMe) => {
-  return (dispatch) => {
-    dispatch(toggleFetching(true));
-    loginAPI.login(email, password, rememberMe).then(response => {
-      if (response.data.resultCode === 0) {
-        headerAPI.getAuth().then(response => {
-          if (response.resultCode === 0) {
-            dispatch(toggleFetching(false));
-            let { id, email, login } = response.data
-            dispatch(setAuthUserData(id, email, login,));
-
-          }
-        })
-      }
-    })
-  }
-}
 
 
 

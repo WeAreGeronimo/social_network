@@ -1,4 +1,4 @@
 export const required = value => {
     if (value) return undefined;
-    return 'Поле обязательно'
+    return 'Это поле обязательно к заполнению.'
 }
