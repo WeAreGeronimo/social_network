@@ -1,4 +1,4 @@
-export const required = value => {
-    if (value) return undefined;
-    return 'Это поле обязательно к заполнению.'
-}
+export const required = (value) => {
+  if (value) return undefined;
+  return 'Это поле обязательно к заполнению.';
+};

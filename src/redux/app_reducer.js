@@ -1,34 +1,33 @@
-import { setAuth } from "./auth_reducer";
+import { setAuth } from './auth_reducer';
 
-
-const INITIALISED_SUCCESSED = "INITIALISED_SUCCESSED";
+const INITIALISED_SUCCESSED = 'INITIALISED_SUCCESSED';
 
 const initialState = {
-    initialised: false
-
-}
+  initialised: false,
+};
 
 const appReducer = (state = initialState, action) => {
   switch (action.type) {
     case INITIALISED_SUCCESSED:
-      return {     
+      return {
         ...state,
-        initialised: true
-      }
+        initialised: true,
+      };
 
-    default: return state;
+    default:
+      return state;
   }
-}
+};
 
-export const initialisedSuccess = () => ({ type: INITIALISED_SUCCESSED});
-
+export const initialisedSuccess = () => ({
+  type: INITIALISED_SUCCESSED,
+});
 
 export const initialiseApp = () => (dispatch) => {
-    let promise = dispatch(setAuth());
-    Promise.all([promise]).then(() => {
-        dispatch(initialisedSuccess());
-    })
-}
-  
+  const promise = dispatch(setAuth());
+  Promise.all([promise]).then(() => {
+    dispatch(initialisedSuccess());
+  });
+};
 
 export default appReducer;
