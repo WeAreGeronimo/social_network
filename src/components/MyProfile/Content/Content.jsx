@@ -4,9 +4,9 @@ import AboutUser from './AboutUser/AboutUser';
 import ContactInfo from './ContactInfo/ContactInfo';
 import _css from './Content.module.css';
 import PersonalInfo from './PersonalInfo/PersonalInfo';
-import StatusH from './Status/Status copy';
 
 import WallContainer from './Wall/WallContainer';
+import StatusH from './Status/Status';
 
 const CONTENT = (props) => {
   return (
