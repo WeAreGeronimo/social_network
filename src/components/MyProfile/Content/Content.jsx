@@ -4,7 +4,7 @@ import AboutUser from './AboutUser/AboutUser';
 import ContactInfo from './ContactInfo/ContactInfo';
 import _css from './Content.module.css';
 import PersonalInfo from './PersonalInfo/PersonalInfo';
-import Status from './Status/Status';
+import StatusH from './Status/Status copy';
 
 import WallContainer from './Wall/WallContainer';
 
@@ -14,7 +14,7 @@ const CONTENT = (props) => {
       <div className={_css.name_surname}>
         {props.profile.fullName}
       </div>
-      <Status profile={props.profile} {...props} />
+      <StatusH profile={props.profile} {...props} />
       <div className={_css.informations_about_user} />
       <AboutUser />
       <div className={_css.information_bar}>Информация</div>
