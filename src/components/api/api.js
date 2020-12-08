@@ -3,11 +3,20 @@ import * as axios from 'axios';
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const BASE_URL = 'https://social-network.samuraijs.com/api/1.0/';
+const BASE_URL2 = 'http://localhost:2222/';
 
 const instance = axios.create({
   withCredentials: true,
   baseURL: BASE_URL,
   headers: { 'API-KEY': 'e1ab8fbd-d883-4160-929d-5733c631fc3f' },
+});
+
+const instanceMyAPI = axios.create({
+  baseURL: BASE_URL2,
+});
+
+const instanceRegister = axios.create({
+  baseURL: BASE_URL2,
 });
 
 export const usersAPI = {
@@ -37,7 +46,9 @@ export const usersAPI = {
 
 export const headerAPI = {
   getAuth() {
-    return instance.get(`auth/me`).then((response) => response.data);
+    return instanceMyAPI
+      .get(`auth/me`)
+      .then((response) => response.data);
   },
 };
 
@@ -69,8 +80,18 @@ export const loginAPI = {
       rememberMe: remember,
     });
   },
-
   logout() {
     return instance.post(`auth/logout`);
+  },
+};
+
+export const RegistrationAPI = {
+  registration(emailData, passData, nameData, surnameData) {
+    return instanceRegister.post(`api/register`, {
+      email: emailData,
+      password: passData,
+      name: nameData,
+      surname: surnameData,
+    });
   },
 };

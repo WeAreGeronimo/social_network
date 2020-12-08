@@ -1,6 +1,10 @@
 // eslint-disable-next-line import/no-unresolved
 import { stopSubmit } from 'redux-form';
-import { headerAPI, loginAPI } from '../components/api/api';
+import {
+  RegistrationAPI,
+  headerAPI,
+  loginAPI,
+} from '../components/api/api';
 import { toggleFetching } from './users_reducer';
 
 const SET_USER_DATA = 'SET_USER_DATA';
@@ -8,7 +12,6 @@ const SET_USER_DATA = 'SET_USER_DATA';
 const initialState = {
   userId: null,
   email: null,
-  login: null,
   isAuth: false,
 };
 
@@ -36,8 +39,8 @@ export const setAuth = () => (dispatch) => {
   return headerAPI.getAuth().then((response) => {
     if (response.resultCode === 0) {
       dispatch(toggleFetching(false));
-      const { id, email, login } = response.data;
-      dispatch(setAuthUserData(id, email, login, true));
+      const { id, email } = response.data;
+      dispatch(setAuthUserData(id, email, true));
     }
   });
 };
@@ -71,6 +74,25 @@ export const logOut = () => {
       }
     });
   };
+};
+
+export const CreateNewUser = (
+  emailData,
+  passData,
+  nameData,
+  surnameData,
+) => (dispatch) => {
+  dispatch(toggleFetching(true));
+  return RegistrationAPI.registration(
+    emailData,
+    passData,
+    nameData,
+    surnameData,
+  ).then((response) => {
+    if (response.resultCode === 0) {
+      dispatch(toggleFetching(false));
+    }
+  });
 };
 
 export default authReducer;

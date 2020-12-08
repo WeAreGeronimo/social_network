@@ -93,6 +93,8 @@ export const getUsers = (currentPage, pageSize) => {
     dispatch(toggleFetching(true));
     usersAPI.getUsers(currentPage, pageSize).then((response) => {
       dispatch(toggleFetching(false));
+      // eslint-disable-next-line no-debugger
+      debugger;
       dispatch(setUsers(response.items));
       dispatch(setTotalUsersCount(response.totalCount));
     });

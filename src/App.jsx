@@ -13,6 +13,7 @@ import HeaderAPIComponent from './components/Global_components/Header/HeaderCont
 import Login from './components/Login/Login';
 import { initialiseApp } from './redux/app_reducer';
 import Preloader from './components/Global_components/preloader/Preloader';
+import RegistrationContainer from './components/Registration/Registration';
 
 class App extends React.Component {
   componentDidMount() {
@@ -42,6 +43,10 @@ class App extends React.Component {
           <Route path="/audios" render={() => <MyAudios />} />
           <Route path="/users" render={() => <UsersContainer />} />
           <Route path="/login" render={() => <Login />} />
+          <Route
+            path="/registration"
+            render={() => <RegistrationContainer />}
+          />
 
           {/* <Route path='/profile/:userId?'><ProfileContainer /></Route>
           <Route path='/dialogs'><MyDialogsContainer /></Route>
