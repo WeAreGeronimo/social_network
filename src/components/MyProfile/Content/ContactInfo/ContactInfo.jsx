@@ -29,16 +29,16 @@ const ContactInfo = (props) => {
             <a href="#s">Торонто</a>
           </div>
           <div className="mobile_number_user">
-            <a href="#s">{props.profile.contacts.instagram}</a>
+            <a href="#s">props.profile.contacts.instagram</a>
           </div>
           <div className="home_number_user">
-            <a href="#s">{props.profile.contacts.twitter}</a>
+            <a href="#s">props.profile.contacts.twitter</a>
           </div>
           <div className="icq_user">
-            <a href="#s">{props.profile.contacts.vk}</a>
+            <a href="#s">props.profile.contacts.vk</a>
           </div>
           <div className="site_user">
-            <a href="#s">{props.profile.contacts.vk}</a>
+            <a href="#s">props.profile.contacts.vk</a>
           </div>
         </div>
       </div>

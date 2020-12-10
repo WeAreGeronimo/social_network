@@ -12,6 +12,7 @@ const SET_USER_DATA = 'SET_USER_DATA';
 const initialState = {
   userId: null,
   email: null,
+  name: null,
   isAuth: false,
 };
 
@@ -20,8 +21,7 @@ const authReducer = (state = initialState, action) => {
     case SET_USER_DATA:
       return {
         ...state,
-        ...action.data,
-        isAuth: true,
+        ...action.payload,
       };
 
     default:
@@ -29,46 +29,43 @@ const authReducer = (state = initialState, action) => {
   }
 };
 
-export const setAuthUserData = (userId, email, login, isAuth) => ({
+export const setAuthUserData = (userId, email, name, isAuth) => ({
   type: SET_USER_DATA,
-  data: { userId, email, login, isAuth },
+  payload: { userId, email, name, isAuth },
 });
 
 export const setAuth = () => (dispatch) => {
   dispatch(toggleFetching(true));
   return headerAPI.getAuth().then((response) => {
-    if (response.resultCode === 0) {
+    console.log(response);
+    if (response.data.resultCode === 0) {
       dispatch(toggleFetching(false));
-      const { id, email } = response.data;
-      dispatch(setAuthUserData(id, email, true));
+      const { id, email, name } = response.data.apiData;
+      dispatch(setAuthUserData(id, email, name, true));
     }
   });
 };
 
-export const setAuthFromLogin = (email, password, rememberMe) => (
-  dispatch,
-) => {
+export const setAuthFromLogin = (email, password) => (dispatch) => {
   dispatch(toggleFetching(true));
-  loginAPI
-    .login(email, password, rememberMe, true)
-    .then((response) => {
-      if (response.data.resultCode === 0) {
-        dispatch(setAuth());
-      } else {
-        const message =
-          response.data.messages.length > 0
-            ? response.data.messages[0]
-            : 'Что-то пошло не так...';
-        dispatch(stopSubmit('loginForm', { _error: message }));
-      }
-    });
+  loginAPI.login(email, password).then((response) => {
+    console.log(response);
+    if (response.data.resultCode === 0) {
+      dispatch(setAuth());
+    } else {
+      const message = response.data.apiData.messages
+        ? response.data.apiData.messages
+        : 'Что-то пошло не так...';
+      dispatch(stopSubmit('loginForm', { _error: message }));
+    }
+  });
 };
 
 export const logOut = () => {
   return (dispatch) => {
     dispatch(toggleFetching(true));
     loginAPI.logout().then((response) => {
-      if (response.resultCode === 0) {
+      if (response.data.resultCode === 0) {
         dispatch(toggleFetching(false));
         dispatch(setAuthUserData(null, null, null, false));
       }

@@ -1,8 +1,10 @@
 import { profileAPI } from '../components/api/api';
+import { beautifulWhenTimeText } from '../TimeTextFunc';
 
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
+const SET_NEW_TIME_STATUS = 'SET_NEW_TIME_STATUS';
 
 const initialState = {
   postData: [
@@ -40,7 +42,10 @@ const initialState = {
 
   profile: null,
 
-  status: '',
+  statusH: {
+    statusText: null,
+    timeCreation: null,
+  },
 };
 
 const profileReducer = (state = initialState, action) => {
@@ -67,7 +72,13 @@ const profileReducer = (state = initialState, action) => {
     }
 
     case SET_STATUS: {
-      return { ...state, status: action.status };
+      return {
+        ...state,
+        statusH: {
+          statusText: action.statusText,
+          timeCreation: action.timeCreation,
+        },
+      };
     }
 
     default:
@@ -80,9 +91,11 @@ export const setUserProfile = (profile) => ({
   type: SET_USER_PROFILE,
   profile,
 });
-export const updateStatusInState = (status) => ({
+
+export const updateStatusInState = (statusText, timeCreation) => ({
   type: SET_STATUS,
-  status,
+  statusText,
+  timeCreation,
 });
 
 export const getUserProfile = (userId) => {
@@ -96,14 +109,19 @@ export const getUserProfile = (userId) => {
 export const getStatusFromAPI = (userId) => {
   return (dispatch) => {
     profileAPI.getStatus(userId).then((response) => {
-      dispatch(updateStatusInState(response.data));
+      dispatch(
+        updateStatusInState(
+          response.data.status.statusText,
+          response.data.status.timeCreation,
+        ),
+      );
     });
   };
 };
 
-export const setNewStatus = (text) => {
+export const setNewStatus = (text, time) => {
   return (dispatch) => {
-    profileAPI.updateStatus(text).then((response) => {
+    profileAPI.updateStatus(text, time).then((response) => {
       if (response.data.resultCode === 0) {
         dispatch(updateStatusInState(text));
       }

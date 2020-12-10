@@ -12,7 +12,7 @@ const CONTENT = (props) => {
   return (
     <div className={_css.content}>
       <div className={_css.name_surname}>
-        {props.profile.fullName}
+        {props.profile.name} {props.profile.surname}
       </div>
       <StatusH profile={props.profile} {...props} />
       <div className={_css.informations_about_user} />

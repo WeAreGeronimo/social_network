@@ -1,14 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import _css from './Status.module.css';
 import {
   getStatusFromAPI,
   setNewStatus,
 } from '../../../../redux/profile_reducer';
+import { beautifulWhenTimeText } from '../../../../TimeTextFunc';
 
 const StatusH = (props) => {
+  const initialTimeValue = beautifulWhenTimeText(props.timeCreation);
+  const [whenUpdateStore, setWhenUpdate] = useState(initialTimeValue);
   const [editMode, setEditMode] = useState(false);
   const [status, setStatus] = useState(props.status);
+  const oldTimer = useRef(null);
+  useEffect(() => {
+    clearInterval(oldTimer.current);
+    oldTimer.current = setInterval(() => {
+      const time = beautifulWhenTimeText(props.timeCreation);
+      setWhenUpdate(time);
+    }, 1000);
+
+    // return () => clearInterval(oldTimer.current);
+  }, [props.timeCreation]);
 
   useEffect(() => {
     setStatus(props.status);
@@ -19,7 +32,8 @@ const StatusH = (props) => {
   };
   const deactivateEditMode = () => {
     setEditMode(false);
-    props.setNewStatus(status);
+    const timeNow = Date.now();
+    props.setNewStatus(status, timeNow);
   };
   const onStatusChange = (e) => {
     setStatus(e.currentTarget.value);
@@ -46,13 +60,14 @@ const StatusH = (props) => {
           />
         )}
       </div>
-      <div className={_css.timer_status}>Обновлено очень давно</div>
+      <div className={_css.timer_status}>{whenUpdateStore}</div>
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
-  status: state.profilePage.status,
+  status: state.profilePage.statusH.statusText,
+  timeCreation: state.profilePage.statusH.timeCreation,
   profile: state.profilePage.profile,
 });
 

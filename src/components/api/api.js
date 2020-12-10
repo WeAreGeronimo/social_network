@@ -2,26 +2,23 @@ import * as axios from 'axios';
 
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
-const BASE_URL = 'https://social-network.samuraijs.com/api/1.0/';
-const BASE_URL2 = 'http://localhost:2222/';
+const BASE_URL = 'https://social-network.samuraijs.com/api/1.0/'; // TODO clean this file
+const BASE_URL_MYAPI = 'http://api.app.com:2222/';
 
-const instance = axios.create({
-  withCredentials: true,
-  baseURL: BASE_URL,
-  headers: { 'API-KEY': 'e1ab8fbd-d883-4160-929d-5733c631fc3f' },
-});
+// const instance = axios.create({
+//   withCredentials: true,
+//   baseURL: BASE_URL,
+//   headers: { 'API-KEY': 'e1ab8fbd-d883-4160-929d-5733c631fc3f' },
+// });
 
 const instanceMyAPI = axios.create({
-  baseURL: BASE_URL2,
-});
-
-const instanceRegister = axios.create({
-  baseURL: BASE_URL2,
+  baseURL: BASE_URL_MYAPI,
+  withCredentials: true,
 });
 
 export const usersAPI = {
   getUsers(currentPage = 1, pageSize = 5) {
-    return instance
+    return instanceMyAPI
       .get(`users?page=${currentPage}&count=${pageSize}`)
       .then((response) => response.data);
   },
@@ -29,12 +26,12 @@ export const usersAPI = {
   F_UNF_User_toggle(id = 1, type) {
     switch (type) {
       case FOLLOW: {
-        return instance
+        return instanceMyAPI
           .post(`follow/${id}`)
           .then((response) => response.data);
       }
       case UNFOLLOW: {
-        return instance
+        return instanceMyAPI
           .delete(`follow/${id}`)
           .then((response) => response.data);
       }
@@ -46,48 +43,45 @@ export const usersAPI = {
 
 export const headerAPI = {
   getAuth() {
-    return instanceMyAPI
-      .get(`auth/me`)
-      .then((response) => response.data);
+    return instanceMyAPI.get(`api/auth/me`);
   },
 };
 
 export const profileAPI = {
   getProfile(userId) {
-    return instance
+    return instanceMyAPI
       .get(`profile/${userId}`)
       .then((response) => response);
   },
 
   getStatus(userId) {
-    return instance
-      .get(`profile/status/${userId}`)
+    return instanceMyAPI
+      .post(`profile/status/`, { userId })
       .then((response) => response);
   },
 
-  updateStatus(status) {
-    return instance
-      .put(`profile/status/`, { status })
+  updateStatus(status, timeCreation) {
+    return instanceMyAPI
+      .put(`profile/status/`, { status, timeCreation })
       .then((response) => response);
   },
 };
 
 export const loginAPI = {
-  login(emailData, passData, remember = false) {
-    return instance.post(`auth/login`, {
+  login(emailData, passData) {
+    return instanceMyAPI.post(`api/login`, {
       email: emailData,
       password: passData,
-      rememberMe: remember,
     });
   },
   logout() {
-    return instance.post(`auth/logout`);
+    return instanceMyAPI.post(`api/auth/logout`);
   },
 };
 
 export const RegistrationAPI = {
   registration(emailData, passData, nameData, surnameData) {
-    return instanceRegister.post(`api/register`, {
+    return instanceMyAPI.post(`api/register`, {
       email: emailData,
       password: passData,
       name: nameData,

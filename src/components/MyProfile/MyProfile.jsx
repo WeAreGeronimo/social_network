@@ -9,9 +9,13 @@ const MyProfile = (props) => {
   if (!props.profile) {
     return <Preloader />;
   }
+
   return (
     <div className={_css.my_profile_css}>
-      <YellowBar text={props.profile.fullName} />
+      <YellowBar
+        name={props.profile.name}
+        surname={props.profile.surname}
+      />
       <MiddleColumnProfile profile={props.profile} />
       <Content profile={props.profile} {...props} />
     </div>

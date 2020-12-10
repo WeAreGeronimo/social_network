@@ -12,7 +12,7 @@ const HEADER = (props) => {
       <div className={_css.login}>
         {' '}
         {props.isAuth ? (
-          <span onClick={props.logOut}> {props.login}(выйти)</span>
+          <span onClick={props.logOut}> {props.name}(выйти)</span>
         ) : (
           <>
             <NavLink to="/login">Войти</NavLink>

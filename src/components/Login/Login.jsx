@@ -62,11 +62,7 @@ const LoginForm = (props) => {
 
 const LoginContainer = (props) => {
   const onSubmit = (formData) => {
-    props.setAuthFromLogin(
-      formData.email,
-      formData.password,
-      formData.rememberMe,
-    );
+    props.setAuthFromLogin(formData.email, formData.password);
     // console.log(formData);
   };
 

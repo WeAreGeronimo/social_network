@@ -10,9 +10,10 @@ const MiddleColumnProfile = (props) => {
         <div className={_css.profile_photo}>
           <img
             src={
-              props.profile.photos.large
-                ? props.profile.photos.large
-                : 'https://vk.com/images/dquestion_app_widget_2_c.png'
+              // props.profile.photos.large
+              //   ? props.profile.photos.large
+              //   :
+              'https://vk.com/images/dquestion_app_widget_2_c.png'
             }
           />
         </div>
