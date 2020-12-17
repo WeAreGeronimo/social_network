@@ -1,5 +1,4 @@
 import { profileAPI } from '../components/api/api';
-import { beautifulWhenTimeText } from '../TimeTextFunc';
 
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
@@ -7,29 +6,7 @@ const SET_STATUS = 'SET_STATUS';
 const SET_NEW_TIME_STATUS = 'SET_NEW_TIME_STATUS';
 
 const initialState = {
-  postData: [
-    {
-      id: 1,
-      name: 'Егор почти Крид',
-      text_post: 'я наконец-то свободен от блэкстар',
-      time: 'сегодня в 20:31',
-      likes_q: 201,
-    },
-    {
-      id: 2,
-      name: 'Егор почти Крид',
-      text_post: 'да здравствует реакт',
-      time: 'сегодня в 20:12',
-      likes_q: 7,
-    },
-    {
-      id: 3,
-      name: 'Егор почти Крид',
-      text_post: 'да здравствует реакт2',
-      time: 'сегодня в 20:12',
-      likes_q: 7,
-    },
-  ],
+  posts: [],
 
   friendData: [
     { id: 1, name: 'Егор', surname: 'Крид' },
@@ -51,17 +28,19 @@ const initialState = {
 const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_POST: {
-      const timeNow = new Date().toLocaleTimeString().slice(0, -3);
       return {
         ...state,
-        postData: [
-          ...state.postData,
+        posts: [
+          ...state.posts,
           {
-            id: 3,
-            name: 'Егор почти Крид',
-            text_post: action.newText,
-            time: `сегодня в ${timeNow}`,
-            likes_q: 0,
+            name: action.name,
+            surname: action.surname,
+            nickname: action.nickname,
+            idWhoLeft: action.idWhoLeft,
+            postId: action.postId,
+            text: action.text,
+            whenTime: action.whenTime,
+            likes: action.likes,
           },
         ],
       };
@@ -86,7 +65,30 @@ const profileReducer = (state = initialState, action) => {
   }
 };
 
-export const addPost = (newText) => ({ type: ADD_POST, newText });
+export const addPost = (
+  name,
+  surname,
+  postId,
+  text,
+  whenTime,
+  likes,
+  nickname,
+) => ({
+  type: ADD_POST,
+  name,
+  surname,
+  postId,
+  text,
+  whenTime,
+  likes,
+  nickname,
+});
+
+// export const addNameNicknameSurnameInPost = (name, nickname, surname) => ({
+//   type: SET_USER_PROFILE,
+//   profile,
+// })
+
 export const setUserProfile = (profile) => ({
   type: SET_USER_PROFILE,
   profile,
@@ -98,10 +100,31 @@ export const updateStatusInState = (statusText, timeCreation) => ({
   timeCreation,
 });
 
+export const updateStatusTimeInState = (timeCreation) => ({
+  type: SET_STATUS,
+  timeCreation,
+});
+
 export const getUserProfile = (userId) => {
   return (dispatch) => {
     profileAPI.getProfile(userId).then((response) => {
-      dispatch(setUserProfile(response.data));
+      dispatch(setUserProfile(response.data.apiData));
+      // eslint-disable-next-line array-callback-return
+      response.data.apiData.posts.map((posts) => {
+        // eslint-disable-next-line no-debugger
+        debugger;
+        dispatch(
+          addPost(
+            posts.name,
+            posts.surname,
+            posts.postId,
+            posts.text,
+            posts.whenTime,
+            posts.likes,
+            posts.nickname ? posts.nickname : null,
+          ),
+        );
+      });
     });
   };
 };
@@ -111,8 +134,8 @@ export const getStatusFromAPI = (userId) => {
     profileAPI.getStatus(userId).then((response) => {
       dispatch(
         updateStatusInState(
-          response.data.status.statusText,
-          response.data.status.timeCreation,
+          response.data.apiData.status.statusText,
+          response.data.apiData.status.timeCreation,
         ),
       );
     });
@@ -126,6 +149,30 @@ export const setNewStatus = (text, time) => {
         dispatch(updateStatusInState(text));
       }
     });
+  };
+};
+
+export const putPostInApi = (text, whenTime, whoseWall) => {
+  return (dispatch) => {
+    profileAPI
+      .putNewPostOnWall(whenTime, text, whoseWall)
+      .then((response) => {
+        if (response.data.resultCode === 0) {
+          dispatch(
+            addPost(
+              response.data.apiData.postedPost.name,
+              response.data.apiData.postedPost.surname,
+              response.data.apiData.postedPost.postId,
+              response.data.apiData.postedPost.text,
+              response.data.apiData.postedPost.whenTime,
+              response.data.apiData.postedPost.likes,
+              response.data.apiData.postedPost.nickname
+                ? response.data.apiData.postedPost.nickname
+                : null,
+            ),
+          );
+        }
+      });
   };
 };
 

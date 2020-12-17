@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import Post from './Posts/Posts';
 import _css from './Wall.module.css';
+import { putPostInApi } from '../../../../redux/profile_reducer';
+import { profileAPI } from '../../../api/api';
 
 const FormForWall = (props) => {
   return (
@@ -23,24 +25,36 @@ const FormForWall = (props) => {
 const WallReduxForm = reduxForm({ form: 'WallForm' })(FormForWall);
 
 const Wall = (props) => {
-  const newPostEl = props.postData.map((postInformation) => (
-    <Post
-      name_surname={postInformation.name}
-      when_time={postInformation.time}
-      message={postInformation.text_post}
-      key={postInformation.id}
-      likes_count={postInformation.likes_q}
-    />
-  ));
-
+  useEffect(() => {
+    const idsArray = [];
+    // eslint-disable-next-line array-callback-return
+    props.profile.posts.map((info) => {
+      idsArray.push(info.from);
+    });
+  }, []);
   const onSubmit = (formData) => {
-    props.addPost(formData.textPost);
+    const whenTime = new Date().toLocaleTimeString().slice(0, -3);
+    props.putPostInApi(formData.textPost, whenTime, props.profile.id);
   };
-
+  // eslint-disable-next-line no-debugger
+  debugger;
   return (
     <div>
       <WallReduxForm onSubmit={onSubmit} />
-      <div className={_css.sorting_post}>{newPostEl}</div>
+      <div className={_css.sorting_post}>
+        {props?.posts.map((postInformation) => (
+          <Post
+            name={postInformation.name}
+            nickname={postInformation.nickname}
+            surname={postInformation.surname}
+            postId={postInformation.postId}
+            text={postInformation.text}
+            whenTime={postInformation.whenTime}
+            key={postInformation.id}
+            likes={postInformation.likes.length}
+          />
+        ))}
+      </div>
     </div>
   );
 };

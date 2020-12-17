@@ -14,6 +14,7 @@ const MyProfile = (props) => {
     <div className={_css.my_profile_css}>
       <YellowBar
         name={props.profile.name}
+        nickname={props.profile.nickname}
         surname={props.profile.surname}
       />
       <MiddleColumnProfile profile={props.profile} />

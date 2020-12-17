@@ -65,6 +65,24 @@ export const profileAPI = {
       .put(`profile/status/`, { status, timeCreation })
       .then((response) => response);
   },
+
+  getTimeWhenStatusSet(userId) {
+    return instanceMyAPI
+      .put(`profile/status/time`, { userId })
+      .then((response) => response);
+  },
+
+  putNewPostOnWall(whenTime, text, whoseWall) {
+    return instanceMyAPI
+      .put(`profile/api/newpost`, { whenTime, text, whoseWall })
+      .then((response) => response);
+  },
+
+  getNamesForWall(array) {
+    return instanceMyAPI
+      .post(`profile/post/names`, { arraysId: array })
+      .then((response) => response);
+  },
 };
 
 export const loginAPI = {

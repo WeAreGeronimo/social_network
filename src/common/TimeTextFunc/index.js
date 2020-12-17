@@ -12,47 +12,47 @@ export const beautifulWhenTimeText = (timeFromStore) => {
 
   if (deltaTimeInSeconds < 10) return 'Обновлено только что';
   else if (deltaTimeInSeconds >= 10 && deltaTimeInSeconds < 30)
-    return 'Обновленно менее 30 секунд назад';
+    return 'Обновлено менее 30 секунд назад';
   else if (deltaTimeInSeconds >= 30 && deltaTimeInSeconds < 60)
-    return 'Обновленно менее минуты назад';
+    return 'Обновлено менее минуты назад';
   else if (deltaTimeInMinutes >= 1 && deltaTimeInMinutes < 2)
-    return 'Обновленно минуту назад';
+    return 'Обновлено минуту назад';
   else if (deltaTimeInMinutes >= 2 && deltaTimeInMinutes < 3)
-    return 'Обновленно две минуты назад';
+    return 'Обновлено две минуты назад';
   else if (deltaTimeInMinutes >= 3 && deltaTimeInMinutes < 4)
-    return 'Обновленно три минуты назад';
+    return 'Обновлено три минуты назад';
   else if (deltaTimeInMinutes >= 4 && deltaTimeInMinutes < 5)
-    return 'Обновленно четыре минуты назад';
+    return 'Обновлено четыре минуты назад';
   else if (deltaTimeInMinutes >= 5 && deltaTimeInMinutes < 6)
-    return 'Обновленно пять минут назад';
+    return 'Обновлено пять минут назад';
   else if (deltaTimeInMinutes >= 6 && deltaTimeInMinutes < 7)
-    return 'Обновленно шесть минут назад';
+    return 'Обновлено шесть минут назад';
   else if (deltaTimeInMinutes >= 7 && deltaTimeInMinutes < 8)
-    return 'Обновленно семь минут назад';
+    return 'Обновлено семь минут назад';
   else if (deltaTimeInMinutes >= 8 && deltaTimeInMinutes < 9)
-    return 'Обновленно восемь минут назад';
+    return 'Обновлено восемь минут назад';
   else if (deltaTimeInMinutes >= 9 && deltaTimeInMinutes < 10)
-    return 'Обновленно девять минут назад';
+    return 'Обновлено девять минут назад';
   else if (deltaTimeInMinutes >= 10 && deltaTimeInMinutes < 11)
-    return 'Обновленно десять минут назад';
+    return 'Обновлено десять минут назад';
   else if (deltaTimeInMinutes >= 15 && deltaTimeInMinutes < 16)
-    return 'Обновленно 15 минут назад';
+    return 'Обновлено 15 минут назад';
   else if (deltaTimeInMinutes >= 30 && deltaTimeInMinutes < 60)
-    return 'Обновленно 30 минут назад';
+    return 'Обновлено 30 минут назад';
   else if (deltaTimeInMinutes >= 60 && deltaTimeInMinutes < 2)
-    return 'Обновленно 1 час назад';
+    return 'Обновлено 1 час назад';
   else if (deltaTimeInHours >= 2 && deltaTimeInHours < 3)
-    return 'Обновленно 2 часа назад';
+    return 'Обновлено 2 часа назад';
   else if (deltaTimeInHours >= 3 && deltaTimeInHours < 4)
-    return 'Обновленно 3 часа назад';
-  else if (deltaTimeInHours >= 4 && deltaTimeInHours < 5)
-    return 'Обновленно сегодня';
+    return 'Обновлено 3 часа назад';
+  else if (deltaTimeInHours >= 4 && deltaTimeInHours < 24)
+    return 'Обновлено сегодня';
   else if (deltaTimeInDays >= 1 && deltaTimeInDays < 2)
-    return 'Обновленно вчера';
+    return 'Обновлено вчера';
   else if (deltaTimeInDays >= 2 && deltaTimeInDays < 3)
-    return 'Обновленно позавчера';
-  else if (deltaTimeInDays >= 3 && deltaTimeInDays < 2)
-    return 'Обновленно вчера';
+    return 'Обновлено позавчера';
+  else if (deltaTimeInDays >= 3 && deltaTimeInDays < 4)
+    return 'Обновлено вчера';
   else if (deltaTimeInDays > 3 )
     return wordCorrect(deltaTimeInDays);
 };
@@ -87,14 +87,14 @@ const wordCorrect = (day) => {
   const lastNumber = twoOrOneLastNumbersInValue(day);
 
   if (lastNumber === '1') {
-    return `Обновленно ${day} день назад`;
+    return `Обновлено ${day} день назад`;
   }
   if (
     lastNumber === '2' ||
     lastNumber === '3' ||
     lastNumber === '4'
   ) {
-    return `Обновленно ${day} дня назад`;
+    return `Обновлено ${day} дня назад`;
   }
   if (
     lastNumber === '5' ||
@@ -105,10 +105,10 @@ const wordCorrect = (day) => {
     lastNumber === '0' ||
     lastNumber === '10'
   ) {
-    return `Обновленно ${day} дней назад`;
+    return `Обновлено ${day} дней назад`;
   }
   if (lastNumber > 10 && lastNumber <= 14) {
-    return `Обновленно ${day} дней назад`;
+    return `Обновлено ${day} дней назад`;
   }
   return null;
 };
