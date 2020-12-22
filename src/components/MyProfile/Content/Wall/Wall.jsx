@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import Post from './Posts/Posts';
 import _css from './Wall.module.css';
-import { putPostInApi } from '../../../../redux/profile_reducer';
-import { profileAPI } from '../../../api/api';
 
 const FormForWall = (props) => {
   return (
@@ -23,27 +21,24 @@ const FormForWall = (props) => {
 };
 
 const WallReduxForm = reduxForm({ form: 'WallForm' })(FormForWall);
-
 const Wall = (props) => {
-  useEffect(() => {
-    const idsArray = [];
-    // eslint-disable-next-line array-callback-return
-    props.profile.posts.map((info) => {
-      idsArray.push(info.from);
-    });
-  }, []);
+  console.log(props);
+  const LikesToggle = (value) => {
+    return props.ToggleLikeWall(value);
+  };
+
   const onSubmit = (formData) => {
     const whenTime = new Date().toLocaleTimeString().slice(0, -3);
     props.putPostInApi(formData.textPost, whenTime, props.profile.id);
   };
-  // eslint-disable-next-line no-debugger
-  debugger;
+
   return (
     <div>
       <WallReduxForm onSubmit={onSubmit} />
       <div className={_css.sorting_post}>
         {props?.posts.map((postInformation) => (
           <Post
+            AuthUserId={props.AuthUserId}
             name={postInformation.name}
             nickname={postInformation.nickname}
             surname={postInformation.surname}
@@ -51,7 +46,10 @@ const Wall = (props) => {
             text={postInformation.text}
             whenTime={postInformation.whenTime}
             key={postInformation.id}
-            likes={postInformation.likes.length}
+            comments={postInformation.comments}
+            likesLength={postInformation.likes.length}
+            likes={postInformation.likes}
+            ToggleLike={LikesToggle}
           />
         ))}
       </div>

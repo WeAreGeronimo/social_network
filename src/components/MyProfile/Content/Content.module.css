@@ -26,13 +26,14 @@
   .information_bar {
     width: 97%;
     height: 20px;
-    background-color: #dce0e9;
+    background-color: #e9eff3;
     margin-top: 20px;
     margin-bottom: 20px;
     font-weight: 700;
     color: #485d7c;
     padding-top: 5px;
     padding-left: 5px;
+    padding-bottom: 2px;
     border-top: 2px solid #485d7c;
   }
 

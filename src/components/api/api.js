@@ -83,6 +83,23 @@ export const profileAPI = {
       .post(`profile/post/names`, { arraysId: array })
       .then((response) => response);
   },
+
+  likeToggle(value) {
+    return instanceMyAPI
+      .post(`profile/api/liketogle`, { postId: value })
+      .then((response) => response);
+  },
+
+  PutNewComment(postId, from, whenTime, textComment) {
+    return instanceMyAPI
+      .put(`profile/api/newcomment`, {
+        postId,
+        from,
+        whenTime,
+        textComment,
+      })
+      .then((response) => response);
+  },
 };
 
 export const loginAPI = {

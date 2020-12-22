@@ -1,0 +1,13 @@
+.inputModuleWrapper {
+    display: flex;
+    margin-top: 20px;
+}
+.textareaComment {
+    outline: none;
+    width: 480px;
+}
+
+.avatar img {
+    width: 50px;
+    margin-right: 10px;
+}

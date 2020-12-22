@@ -3,7 +3,8 @@ import { profileAPI } from '../components/api/api';
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
-const SET_NEW_TIME_STATUS = 'SET_NEW_TIME_STATUS';
+const UPDATE_LIKE_ARRAY = 'UPDATE_LIKE_ARRAY';
+const UPDATE_COMMENT_ARRAY = 'UPDATE_COMMENT_ARRAY';
 
 const initialState = {
   posts: [],
@@ -37,6 +38,7 @@ const profileReducer = (state = initialState, action) => {
             surname: action.surname,
             nickname: action.nickname,
             idWhoLeft: action.idWhoLeft,
+            comments: action.comments,
             postId: action.postId,
             text: action.text,
             whenTime: action.whenTime,
@@ -60,6 +62,46 @@ const profileReducer = (state = initialState, action) => {
       };
     }
 
+    case UPDATE_LIKE_ARRAY: {
+      return {
+        ...state,
+        // eslint-disable-next-line no-unused-expressions,array-callback-return
+        ...state.posts.map((el) => {
+          if (el.postId === action.postId) {
+            // eslint-disable-next-line no-unused-expressions,no-sequences
+            el.name,
+              el.surname,
+              el.nickname,
+              el.idWhoLeft,
+              el.postId,
+              el.text,
+              el.whenTime,
+              action.likes;
+          }
+        }),
+      };
+    }
+
+    case UPDATE_COMMENT_ARRAY: {
+      return {
+        ...state,
+        // eslint-disable-next-line no-unused-expressions,array-callback-return
+        ...state.posts,
+        ...state.posts.comments,
+        comments: [
+          {
+            commentId: action.commentId,
+            whenTime: action.whenTimeComment,
+            textComment: action.textComment,
+            likes: action.likesComment,
+            name: action.nameComment,
+            nickname: action.nicknameComment,
+            surname: action.surnameComment,
+          },
+        ],
+      };
+    }
+
     default:
       return state;
   }
@@ -73,6 +115,7 @@ export const addPost = (
   whenTime,
   likes,
   nickname,
+  comments,
 ) => ({
   type: ADD_POST,
   name,
@@ -82,6 +125,7 @@ export const addPost = (
   whenTime,
   likes,
   nickname,
+  comments,
 });
 
 // export const addNameNicknameSurnameInPost = (name, nickname, surname) => ({
@@ -92,6 +136,12 @@ export const addPost = (
 export const setUserProfile = (profile) => ({
   type: SET_USER_PROFILE,
   profile,
+});
+
+export const AddOrDeleteLike = (postId, likes) => ({
+  type: UPDATE_LIKE_ARRAY,
+  postId,
+  likes,
 });
 
 export const updateStatusInState = (statusText, timeCreation) => ({
@@ -105,14 +155,31 @@ export const updateStatusTimeInState = (timeCreation) => ({
   timeCreation,
 });
 
+export const AddComment = (
+  commentId,
+  whenTimeComment,
+  textComment,
+  likesComment,
+  nameComment,
+  nicknameComment,
+  surnameComment,
+) => ({
+  type: ADD_POST,
+  commentId,
+  whenTimeComment,
+  textComment,
+  likesComment,
+  nameComment,
+  nicknameComment,
+  surnameComment,
+});
+
 export const getUserProfile = (userId) => {
   return (dispatch) => {
     profileAPI.getProfile(userId).then((response) => {
       dispatch(setUserProfile(response.data.apiData));
       // eslint-disable-next-line array-callback-return
       response.data.apiData.posts.map((posts) => {
-        // eslint-disable-next-line no-debugger
-        debugger;
         dispatch(
           addPost(
             posts.name,
@@ -122,6 +189,7 @@ export const getUserProfile = (userId) => {
             posts.whenTime,
             posts.likes,
             posts.nickname ? posts.nickname : null,
+            posts.comments,
           ),
         );
       });
@@ -172,6 +240,44 @@ export const putPostInApi = (text, whenTime, whoseWall) => {
             ),
           );
         }
+      });
+  };
+};
+
+export const ToggleLikeWall = (value) => {
+  return (dispatch) => {
+    profileAPI.likeToggle(value).then((response) => {
+      dispatch(
+        AddOrDeleteLike(
+          response.data.apiData.postId,
+          response.data.apiData.likes,
+        ),
+      );
+    });
+  };
+};
+
+export const PutCommentInApi = (
+  postId,
+  from,
+  whenTime,
+  textComment,
+) => {
+  return (dispatch) => {
+    profileAPI
+      .PutNewComment(postId, from, whenTime, textComment)
+      .then((response) => {
+        dispatch(
+          AddComment(
+            response.data.apiData.postedComment.commentId,
+            response.data.apiData.postedComment.whenTime,
+            response.data.apiData.postedComment.textComment,
+            response.data.apiData.postedComment.likes,
+            response.data.apiData.postedComment.name,
+            response.data.apiData.postedComment.nickname,
+            response.data.apiData.postedComment.surname,
+          ),
+        );
       });
   };
 };

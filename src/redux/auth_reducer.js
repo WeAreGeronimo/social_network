@@ -37,7 +37,6 @@ export const setAuthUserData = (userId, email, name, isAuth) => ({
 export const setAuth = () => (dispatch) => {
   dispatch(toggleFetching(true));
   return headerAPI.getAuth().then((response) => {
-    console.log(response);
     if (response.data.resultCode === 0) {
       dispatch(toggleFetching(false));
       const { id, email, name } = response.data.apiData;
