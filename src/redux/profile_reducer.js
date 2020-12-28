@@ -5,6 +5,8 @@ const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
 const UPDATE_LIKE_ARRAY = 'UPDATE_LIKE_ARRAY';
 const UPDATE_COMMENT_ARRAY = 'UPDATE_COMMENT_ARRAY';
+const UPDATE_LIKE_ARRAY_COMMENTS = 'UPDATE_LIKE_ARRAY_COMMENTS';
+const DELETE_COMMENT = 'DELETE_COMMENT';
 
 const initialState = {
   posts: [],
@@ -82,23 +84,70 @@ const profileReducer = (state = initialState, action) => {
       };
     }
 
-    case UPDATE_COMMENT_ARRAY: {
+    case UPDATE_LIKE_ARRAY_COMMENTS: {
       return {
         ...state,
         // eslint-disable-next-line no-unused-expressions,array-callback-return
-        ...state.posts,
-        ...state.posts.comments,
-        comments: [
-          {
-            commentId: action.commentId,
-            whenTime: action.whenTimeComment,
-            textComment: action.textComment,
-            likes: action.likesComment,
-            name: action.nameComment,
-            nickname: action.nicknameComment,
-            surname: action.surnameComment,
-          },
-        ],
+        ...state.posts.map((el) => {
+          // eslint-disable-next-line array-callback-return,consistent-return
+          el.comments.map((elcom) => {
+            if (elcom.commentId === action.commentId) {
+              return (
+                elcom.commentId,
+                elcom.nameComment,
+                elcom.nicknameComment,
+                elcom.surnameComment,
+                elcom.nicknameComment,
+                elcom.textComment,
+                elcom.whenTimeComment,
+                action.likesComment
+              );
+            }
+          });
+        }),
+      };
+    }
+
+    case UPDATE_COMMENT_ARRAY: {
+      return {
+        ...state,
+        posts: state.posts.map((el) => {
+          if (el.postId === action.payload.postId) {
+            return {
+              ...el,
+              comments: [
+                ...el.comments,
+                {
+                  commentId: action.payload.commentId,
+                  name: action.payload.nameComment,
+                  nickname: action.payload.nicknameComment,
+                  surname: action.payload.surnameComment,
+                  whenTime: action.payload.whenTimeComment,
+                  textComment: action.payload.textComment,
+                  likes: action.payload.likesComment,
+                },
+              ],
+            };
+          }
+          return el;
+        }),
+      };
+    }
+
+    case DELETE_COMMENT: {
+      return {
+        ...state,
+        posts: state.posts.map((el) => {
+          if (el.postId === action.payload.postId) {
+            return {
+              ...el,
+              comments: el.comments.filter((comment) => {
+                return comment.commentId !== action.payload.commentId;
+              }),
+            };
+          }
+          return el;
+        }),
       };
     }
 
@@ -144,6 +193,12 @@ export const AddOrDeleteLike = (postId, likes) => ({
   likes,
 });
 
+export const AddOrDeleteLikeComment = (commentId, likes) => ({
+  type: UPDATE_LIKE_ARRAY_COMMENTS,
+  commentId,
+  likes,
+});
+
 export const updateStatusInState = (statusText, timeCreation) => ({
   type: SET_STATUS,
   statusText,
@@ -157,22 +212,40 @@ export const updateStatusTimeInState = (timeCreation) => ({
 
 export const AddComment = (
   commentId,
-  whenTimeComment,
-  textComment,
-  likesComment,
   nameComment,
   nicknameComment,
   surnameComment,
+  textComment,
+  whenTimeComment,
+  likesComment,
+  postId,
 ) => ({
-  type: ADD_POST,
-  commentId,
-  whenTimeComment,
-  textComment,
-  likesComment,
-  nameComment,
-  nicknameComment,
-  surnameComment,
+  type: UPDATE_COMMENT_ARRAY,
+  payload: {
+    commentId,
+    whenTimeComment,
+    textComment,
+    likesComment,
+    nameComment,
+    nicknameComment,
+    surnameComment,
+    postId,
+  },
 });
+
+export const DeleteComment = (commentId, postId) => ({
+  type: DELETE_COMMENT,
+  payload: {
+    commentId,
+    postId,
+  },
+});
+
+export const DeleteCommentTh = (commentId, postId) => {
+  return (dispatch) => {
+    dispatch(DeleteComment(commentId, postId));
+  };
+};
 
 export const getUserProfile = (userId) => {
   return (dispatch) => {
@@ -226,6 +299,7 @@ export const putPostInApi = (text, whenTime, whoseWall) => {
       .putNewPostOnWall(whenTime, text, whoseWall)
       .then((response) => {
         if (response.data.resultCode === 0) {
+          debugger;
           dispatch(
             addPost(
               response.data.apiData.postedPost.name,
@@ -234,9 +308,36 @@ export const putPostInApi = (text, whenTime, whoseWall) => {
               response.data.apiData.postedPost.text,
               response.data.apiData.postedPost.whenTime,
               response.data.apiData.postedPost.likes,
-              response.data.apiData.postedPost.nickname
-                ? response.data.apiData.postedPost.nickname
-                : null,
+              response.data.apiData.postedPost.nickname,
+              response.data.apiData.postedPost.comments,
+            ),
+          );
+        }
+      });
+  };
+};
+
+export const putCommentPostInApi = (
+  text,
+  whenTime,
+  whoseWall,
+  postId,
+) => {
+  return (dispatch) => {
+    profileAPI
+      .putNewCommentOnWallPost(text, whenTime, whoseWall, postId)
+      .then((response) => {
+        if (response.data.resultCode === 0) {
+          dispatch(
+            AddComment(
+              response.data.apiData.postedComment.commentId,
+              response.data.apiData.postedComment.name,
+              response.data.apiData.postedComment.nickname,
+              response.data.apiData.postedComment.surname,
+              response.data.apiData.postedComment.textComment,
+              response.data.apiData.postedComment.whenTime,
+              response.data.apiData.postedComment.likes,
+              postId,
             ),
           );
         }
@@ -246,10 +347,23 @@ export const putPostInApi = (text, whenTime, whoseWall) => {
 
 export const ToggleLikeWall = (value) => {
   return (dispatch) => {
-    profileAPI.likeToggle(value).then((response) => {
+    profileAPI.likeToggleWall(value).then((response) => {
       dispatch(
         AddOrDeleteLike(
           response.data.apiData.postId,
+          response.data.apiData.likes,
+        ),
+      );
+    });
+  };
+};
+
+export const ToggleLikeComment = (value) => {
+  return (dispatch) => {
+    profileAPI.likeToggleComment(value).then((response) => {
+      dispatch(
+        AddOrDeleteLikeComment(
+          response.data.apiData.commentId,
           response.data.apiData.likes,
         ),
       );

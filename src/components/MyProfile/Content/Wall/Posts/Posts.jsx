@@ -1,17 +1,53 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
+import { Field, reduxForm } from 'redux-form';
 import _css from './Posts.module.css';
 import Like from '../../../../../assets/Like/Like';
 import CommentSvg from '../../../../../assets/CommentImageSvg/CommentImageSvg';
-import { profileAPI } from '../../../../api/api';
-import { beautifulWhenTimeText } from '../../../../../common/TimeTextFunc';
 import CommentsItem from '../Comments/Comments';
-import InputModuleContainer from './inputComment/InputModuleContainer';
+
+const FormForComments = (props) => {
+  return (
+    <form className={_css.formCom} onSubmit={props.handleSubmit}>
+      <div className={_css.comments_textarea}>
+        <div className={_css.avatar}>
+          <img src="https://pm1.narvii.com/6889/74979d4d2744ec6e27995b6e866f091d04c0b40cr1-515-414v2_uhq.jpg" />
+        </div>
+        <Field
+          className={_css.textarea}
+          name={'textComment'}
+          component={'textarea'}
+        />
+      </div>
+      <div className={_css.buttons}>
+        <button type="submit">Отправить</button>
+      </div>
+    </form>
+  );
+};
 
 const POST = (props) => {
+  const ComentsReduxForm = reduxForm({ form: 'CommentsForm' })(
+    FormForComments,
+  );
+
+  const onSubmit = (formData) => {
+    const whenTime = new Date().toLocaleTimeString().slice(0, -3);
+    props.putCommentPostInApi(
+      formData.textComment,
+      whenTime,
+      props.AuthUserId,
+      props.postId,
+    );
+  };
   const [Boolean, setBoolean] = useState(
     props.likes.includes(props.AuthUserId),
   );
+
+  const [sendCommentMode, setSendCommentMode] = useState(false);
   const [likesCount, setlikesCount] = useState(props.likesLength);
+  const LikesToggleComments = (value) => {
+    return props.ToggleLikeComment(value);
+  };
   return (
     <div className={_css.Post}>
       <div className={_css.avatar}>
@@ -31,7 +67,16 @@ const POST = (props) => {
         <div className={_css.hrefs}>
           <div className={_css.multiBar}>
             <div className={_css.commentSvg}>
-              <CommentSvg />
+              {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus */}
+              <span
+                role="button"
+                onClick={() => {
+                  setSendCommentMode(!sendCommentMode);
+                }}
+                aria-label="Like Button"
+              >
+                <CommentSvg sendCommentMode={sendCommentMode} />
+              </span>
             </div>
             <div className={_css.likes}>
               {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus */}
@@ -57,9 +102,25 @@ const POST = (props) => {
       </div>
       <div className={_css.commentBlock}>
         {/* eslint-disable-next-line array-callback-return */}
-        {props.comments?.map((commentEl) => {
-          return <CommentsItem name={commentEl.from} />;
-        })}
+        {props.comments?.map((commentEl) => (
+          <CommentsItem
+            from={commentEl.from}
+            AuthUserId={props.AuthUserId}
+            postId={props.postId}
+            commentId={commentEl.commentId}
+            name={commentEl.name}
+            nickname={commentEl.nickname}
+            surname={commentEl.surname}
+            whenTime={commentEl.whenTime}
+            textComment={commentEl.textComment}
+            likes={commentEl.likes}
+            ToggleLikeComment={LikesToggleComments}
+            DeleteCommentTh={props.DeleteCommentTh}
+          />
+        ))}
+        {sendCommentMode ? (
+          <ComentsReduxForm onSubmit={onSubmit} />
+        ) : null}
       </div>
     </div>
   );

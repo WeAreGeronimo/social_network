@@ -3,6 +3,9 @@ import {
   addPost,
   putPostInApi,
   ToggleLikeWall,
+  ToggleLikeComment,
+  putCommentPostInApi,
+  DeleteCommentTh,
 } from '../../../../redux/profile_reducer';
 import Wall from './Wall';
 
@@ -18,6 +21,9 @@ const WallContainer = connect(mapStateToProps, {
   addPost,
   putPostInApi,
   ToggleLikeWall,
+  ToggleLikeComment,
+  putCommentPostInApi,
+  DeleteCommentTh,
 })(Wall);
 
 export default WallContainer;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import Post from './Posts/Posts';
 import _css from './Wall.module.css';
@@ -22,7 +22,6 @@ const FormForWall = (props) => {
 
 const WallReduxForm = reduxForm({ form: 'WallForm' })(FormForWall);
 const Wall = (props) => {
-  console.log(props);
   const LikesToggle = (value) => {
     return props.ToggleLikeWall(value);
   };
@@ -50,6 +49,9 @@ const Wall = (props) => {
             likesLength={postInformation.likes.length}
             likes={postInformation.likes}
             ToggleLike={LikesToggle}
+            ToggleLikeComment={props.ToggleLikeComment}
+            putCommentPostInApi={props.putCommentPostInApi}
+            DeleteCommentTh={props.DeleteCommentTh}
           />
         ))}
       </div>

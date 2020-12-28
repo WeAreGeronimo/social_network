@@ -57,3 +57,27 @@
     font-weight: 700;
     color: #285272;
 }
+
+.upperBar {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+}
+
+.delete {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.deleteBlockNone {
+    display: none;
+}
+
+.deleteBlockDisplay {
+    display: block;
+    animation: scale 0.2s ease 1;
+}
+
+@keyframes scale {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+}

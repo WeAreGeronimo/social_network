@@ -78,15 +78,32 @@ export const profileAPI = {
       .then((response) => response);
   },
 
+  putNewCommentOnWallPost(textComment, whenTime, whoseWall, postId) {
+    return instanceMyAPI
+      .put(`profile/api/newcomment`, {
+        textComment,
+        whenTime,
+        whoseWall,
+        postId,
+      })
+      .then((response) => response);
+  },
+
   getNamesForWall(array) {
     return instanceMyAPI
       .post(`profile/post/names`, { arraysId: array })
       .then((response) => response);
   },
 
-  likeToggle(value) {
+  likeToggleWall(value) {
     return instanceMyAPI
       .post(`profile/api/liketogle`, { postId: value })
+      .then((response) => response);
+  },
+
+  likeToggleComment(value) {
+    return instanceMyAPI
+      .post(`profile/api/comment/liketogle`, { commentId: value })
       .then((response) => response);
   },
 
