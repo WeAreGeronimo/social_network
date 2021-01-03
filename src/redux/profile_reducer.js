@@ -3,7 +3,7 @@ import { profileAPI } from '../components/api/api';
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
-const UPDATE_LIKE_ARRAY = 'UPDATE_LIKE_ARRAY';
+const UPDATE_LIKED_UNLIKED_POST = 'UPDATE_LIKED_UNLIKED_POST';
 const UPDATE_COMMENT_ARRAY = 'UPDATE_COMMENT_ARRAY';
 const UPDATE_LIKE_ARRAY_COMMENTS = 'UPDATE_LIKE_ARRAY_COMMENTS';
 const DELETE_COMMENT = 'DELETE_COMMENT';
@@ -33,25 +33,13 @@ const profileReducer = (state = initialState, action) => {
     case ADD_POST: {
       return {
         ...state,
-        posts: [
-          ...state.posts,
-          {
-            name: action.name,
-            surname: action.surname,
-            nickname: action.nickname,
-            idWhoLeft: action.idWhoLeft,
-            comments: action.comments,
-            postId: action.postId,
-            text: action.text,
-            whenTime: action.whenTime,
-            likes: action.likes,
-          },
-        ],
+        ...state.posts,
+        posts: [...state.posts, ...action.payload.posts],
       };
     }
 
     case SET_USER_PROFILE: {
-      return { ...state, profile: action.profile };
+      return { ...state, profile: action.payload };
     }
 
     case SET_STATUS: {
@@ -64,22 +52,15 @@ const profileReducer = (state = initialState, action) => {
       };
     }
 
-    case UPDATE_LIKE_ARRAY: {
+    case UPDATE_LIKED_UNLIKED_POST: {
       return {
         ...state,
         // eslint-disable-next-line no-unused-expressions,array-callback-return
-        ...state.posts.map((el) => {
-          if (el.postId === action.postId) {
-            // eslint-disable-next-line no-unused-expressions,no-sequences
-            el.name,
-              el.surname,
-              el.nickname,
-              el.idWhoLeft,
-              el.postId,
-              el.text,
-              el.whenTime,
-              action.likes;
+        posts: state.posts.map((el) => {
+          if (el.postId === action.payload.postId) {
+            el.likes = action.payload.likes;
           }
+          return el;
         }),
       };
     }
@@ -87,23 +68,14 @@ const profileReducer = (state = initialState, action) => {
     case UPDATE_LIKE_ARRAY_COMMENTS: {
       return {
         ...state,
-        // eslint-disable-next-line no-unused-expressions,array-callback-return
-        ...state.posts.map((el) => {
-          // eslint-disable-next-line array-callback-return,consistent-return
+        posts: state.posts.map((el) => {
           el.comments.map((elcom) => {
-            if (elcom.commentId === action.commentId) {
-              return (
-                elcom.commentId,
-                elcom.nameComment,
-                elcom.nicknameComment,
-                elcom.surnameComment,
-                elcom.nicknameComment,
-                elcom.textComment,
-                elcom.whenTimeComment,
-                action.likesComment
-              );
+            if (elcom.commentId === action.payload.commentId) {
+              elcom.likes = action.payload.likes;
             }
+            return elcom;
           });
+          return el;
         }),
       };
     }
@@ -156,47 +128,24 @@ const profileReducer = (state = initialState, action) => {
   }
 };
 
-export const addPost = (
-  name,
-  surname,
-  postId,
-  text,
-  whenTime,
-  likes,
-  nickname,
-  comments,
-) => ({
+export const addPost = (posts) => ({
   type: ADD_POST,
-  name,
-  surname,
-  postId,
-  text,
-  whenTime,
-  likes,
-  nickname,
-  comments,
+  payload: { posts },
 });
 
-// export const addNameNicknameSurnameInPost = (name, nickname, surname) => ({
-//   type: SET_USER_PROFILE,
-//   profile,
-// })
-
-export const setUserProfile = (profile) => ({
+export const setUserProfile = (payload) => ({
   type: SET_USER_PROFILE,
-  profile,
+  payload,
 });
 
-export const AddOrDeleteLike = (postId, likes) => ({
-  type: UPDATE_LIKE_ARRAY,
-  postId,
-  likes,
+export const AddOrDeleteLike = (payload) => ({
+  type: UPDATE_LIKED_UNLIKED_POST,
+  payload,
 });
 
-export const AddOrDeleteLikeComment = (commentId, likes) => ({
+export const AddOrDeleteLikeComment = (payload) => ({
   type: UPDATE_LIKE_ARRAY_COMMENTS,
-  commentId,
-  likes,
+  payload,
 });
 
 export const updateStatusInState = (statusText, timeCreation) => ({
@@ -243,7 +192,16 @@ export const DeleteComment = (commentId, postId) => ({
 
 export const DeleteCommentTh = (commentId, postId) => {
   return (dispatch) => {
-    dispatch(DeleteComment(commentId, postId));
+    profileAPI.DeleteCommentFromApi(commentId).then((response) => {
+      if (response.data.resultCode === 0) {
+        dispatch(
+          DeleteComment(
+            response.data.apiData.commentId,
+            response.data.apiData.postId,
+          ),
+        );
+      }
+    });
   };
 };
 
@@ -251,22 +209,21 @@ export const getUserProfile = (userId) => {
   return (dispatch) => {
     profileAPI.getProfile(userId).then((response) => {
       dispatch(setUserProfile(response.data.apiData));
-      // eslint-disable-next-line array-callback-return
-      response.data.apiData.posts.map((posts) => {
-        dispatch(
-          addPost(
-            posts.name,
-            posts.surname,
-            posts.postId,
-            posts.text,
-            posts.whenTime,
-            posts.likes,
-            posts.nickname ? posts.nickname : null,
-            posts.comments,
-          ),
-        );
-      });
+      if (response.data.apiData.posts.length !== 0) {
+        dispatch(addPost(response.data.apiData.posts));
+      }
     });
+  };
+};
+
+export const getNextWallPosts = (userIdc, nPostc) => {
+  return (dispatch) => {
+    profileAPI
+      .GetNextWallPostsFromApi(userIdc, nPostc)
+      .then((response) => {
+        // eslint-disable-next-line array-callback-return
+        dispatch(addPost(response.data.apiData.posts));
+      });
   };
 };
 
@@ -348,12 +305,7 @@ export const putCommentPostInApi = (
 export const ToggleLikeWall = (value) => {
   return (dispatch) => {
     profileAPI.likeToggleWall(value).then((response) => {
-      dispatch(
-        AddOrDeleteLike(
-          response.data.apiData.postId,
-          response.data.apiData.likes,
-        ),
-      );
+      dispatch(AddOrDeleteLike(response.data.apiData));
     });
   };
 };
@@ -361,12 +313,7 @@ export const ToggleLikeWall = (value) => {
 export const ToggleLikeComment = (value) => {
   return (dispatch) => {
     profileAPI.likeToggleComment(value).then((response) => {
-      dispatch(
-        AddOrDeleteLikeComment(
-          response.data.apiData.commentId,
-          response.data.apiData.likes,
-        ),
-      );
+      dispatch(AddOrDeleteLikeComment(response.data.apiData));
     });
   };
 };

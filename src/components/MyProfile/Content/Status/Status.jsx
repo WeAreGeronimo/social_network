@@ -77,7 +77,9 @@ const StatusH = (props) => {
           />
         )}
       </div>
-      <div className={_css.timer_status}>{whenUpdateStore}</div>
+      <div className={_css.timer_status}>
+        Обновлено{whenUpdateStore}
+      </div>
     </div>
   );
 };

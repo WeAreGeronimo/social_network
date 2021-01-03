@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import _css from './Posts.module.css';
 import Like from '../../../../../assets/Like/Like';
 import CommentSvg from '../../../../../assets/CommentImageSvg/CommentImageSvg';
 import CommentsItem from '../Comments/Comments';
+import { beautifulWhenTimeText } from '../../../../../common/TimeTextFunc';
+import NextCommentsBar from './nextCommentsBar/nextCommentsBar';
 
 const FormForComments = (props) => {
   return (
@@ -29,9 +31,21 @@ const POST = (props) => {
   const ComentsReduxForm = reduxForm({ form: 'CommentsForm' })(
     FormForComments,
   );
+  console.log(props.commentsCountInApi);
+  const initialTimeValue = beautifulWhenTimeText(props.whenTime);
+  const [time, setTime] = useState(initialTimeValue);
+  const oldTimerForPost = useRef(null);
+  const updateTimeInSeconds = 1000;
+
+  useEffect(() => {
+    clearInterval(oldTimerForPost.current);
+    oldTimerForPost.current = setInterval(() => {
+      setTime(beautifulWhenTimeText(props.whenTime));
+    }, updateTimeInSeconds);
+  }, [props.whenTime]);
 
   const onSubmit = (formData) => {
-    const whenTime = new Date().toLocaleTimeString().slice(0, -3);
+    const whenTime = Date.now();
     props.putCommentPostInApi(
       formData.textComment,
       whenTime,
@@ -44,7 +58,7 @@ const POST = (props) => {
   );
 
   const [sendCommentMode, setSendCommentMode] = useState(false);
-  const [likesCount, setlikesCount] = useState(props.likesLength);
+
   const LikesToggleComments = (value) => {
     return props.ToggleLikeComment(value);
   };
@@ -55,12 +69,12 @@ const POST = (props) => {
       </div>
       <div className={_css.name_time_area}>
         <div className={_css.name_surname}>
-          <a href="#s">
+          <a href="#">
             {props.name} {props.nickname} {props.surname}{' '}
           </a>{' '}
           написал:
         </div>
-        <div className={_css.time}>{props.whenTime}</div>
+        <div className={_css.time}>{time}</div>
       </div>
       <div className={_css.post_text}>{props.text}</div>
       <div className={_css.container}>
@@ -73,9 +87,15 @@ const POST = (props) => {
                 onClick={() => {
                   setSendCommentMode(!sendCommentMode);
                 }}
-                aria-label="Like Button"
+                aria-label="Comment Button"
               >
                 <CommentSvg sendCommentMode={sendCommentMode} />
+              </span>
+              <span className={_css.commentCount}>
+                {' '}
+                {props.commentsCountInApi === 0
+                  ? null
+                  : props.commentsCountInApi}
               </span>
             </div>
             <div className={_css.likes}>
@@ -85,16 +105,17 @@ const POST = (props) => {
                 onClick={() => {
                   setBoolean(!Boolean);
                   props.ToggleLike(props.postId);
-                  setlikesCount(
-                    Boolean ? likesCount - 1 : likesCount + 1,
-                  );
                 }}
                 aria-label="Like Button"
               >
-                <Like thisPostLiked={Boolean} />
+                <Like
+                  thisPostLiked={props.likes.includes(
+                    props.AuthUserId,
+                  )}
+                />
               </span>
               <span className={_css.likesQuantity}>
-                {likesCount === 0 ? null : likesCount}
+                {props.likes.length === 0 ? null : props.likes.length}
               </span>
             </div>
           </div>

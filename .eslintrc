@@ -27,6 +27,7 @@
         "react/jsx-curly-brace-presence": "off",
         "no-unused-vars": "off",
         "no-else-return": ["error", {"allowElseIf": true}],
-        "no-debugger": "off"
+        "no-debugger": "off",
+        "no-param-reassign": "off"
     }
 }

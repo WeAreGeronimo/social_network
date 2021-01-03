@@ -117,6 +117,23 @@ export const profileAPI = {
       })
       .then((response) => response);
   },
+
+  GetNextWallPostsFromApi(userIdc, nPostc) {
+    return instanceMyAPI
+      .post(`profile/api/nextwallposts`, {
+        userId: userIdc,
+        nPost: nPostc,
+      })
+      .then((response) => response);
+  },
+
+  DeleteCommentFromApi(comId) {
+    return instanceMyAPI
+      .post(`profile/api/deletecomment`, {
+        commentId: comId,
+      })
+      .then((response) => response);
+  },
 };
 
 export const loginAPI = {

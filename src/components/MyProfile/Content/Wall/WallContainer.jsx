@@ -6,8 +6,10 @@ import {
   ToggleLikeComment,
   putCommentPostInApi,
   DeleteCommentTh,
+  getNextWallPosts,
 } from '../../../../redux/profile_reducer';
 import Wall from './Wall';
+import { beautifulWhenTimeText } from '../../../../common/TimeTextFunc';
 
 const mapStateToProps = (state) => {
   return {
@@ -24,6 +26,8 @@ const WallContainer = connect(mapStateToProps, {
   ToggleLikeComment,
   putCommentPostInApi,
   DeleteCommentTh,
+  getNextWallPosts,
+  beautifulWhenTimeText,
 })(Wall);
 
 export default WallContainer;

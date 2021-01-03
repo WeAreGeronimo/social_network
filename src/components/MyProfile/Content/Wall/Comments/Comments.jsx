@@ -2,20 +2,29 @@ import React, { useEffect, useRef, useState } from 'react';
 import _css from './Comments.module.css';
 import Like from '../../../../../assets/Like/LikeSmall';
 import DeleteButton from '../../../../../assets/DeleteImageSvg/Delete';
+import { beautifulWhenTimeText } from '../../../../../common/TimeTextFunc';
 
 const CommentsItem = (props) => {
-  const [likesCountComment, setlikesCountComment] = useState(
-    props.likes.length,
-  );
-  const [BooleanCom, setBooleanCom] = useState(
-    props.likes.includes(props.AuthUserId),
-  );
   const deletePost = () => {
     props.DeleteCommentTh(props.commentId, props.postId);
   };
   const [deleteShow, setDeleteShow] = useState(_css.deleteBlockNone);
-
   const [focusDeleteIcon, setFocusDeleteIcon] = useState(false);
+  const oldTimerForComment = useRef(null);
+  const initialTimeValueComment = beautifulWhenTimeText(
+    props.whenTime,
+  );
+  const [timeComment, setTimeComment] = useState(
+    initialTimeValueComment,
+  );
+  const updateTimeInSeconds = 1000;
+
+  useEffect(() => {
+    clearInterval(oldTimerForComment);
+    oldTimerForComment.current = setInterval(() => {
+      setTimeComment(beautifulWhenTimeText(props.whenTime));
+    }, updateTimeInSeconds);
+  }, [props.whenTime]);
 
   return (
     <div
@@ -63,28 +72,24 @@ const CommentsItem = (props) => {
         <div className={_css.bottomBlock}>
           <div className={_css.when}>
             {' '}
-            <span>{props.whenTime}</span>{' '}
+            <span>{timeComment}</span>{' '}
           </div>
           <div className={_css.like}>
             {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus */}
             <span
               role="button"
               onClick={() => {
-                setBooleanCom(!BooleanCom);
                 props.ToggleLikeComment(props.commentId);
-                setlikesCountComment(
-                  BooleanCom
-                    ? likesCountComment - 1
-                    : likesCountComment + 1,
-                );
               }}
               aria-label="Like Button"
             >
-              <Like thisPostLiked={BooleanCom} />
+              <Like
+                thisPostLiked={props.likes.includes(props.AuthUserId)}
+              />
             </span>
 
             <span>
-              {likesCountComment === 0 ? null : likesCountComment}
+              {props.likes.length === 0 ? null : props.likes.length}
             </span>
           </div>
         </div>
