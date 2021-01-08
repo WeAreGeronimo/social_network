@@ -127,10 +127,27 @@ export const profileAPI = {
       .then((response) => response);
   },
 
+  GetNextWallCommentsFromApi(postIdc, nCommetnsc) {
+    return instanceMyAPI
+      .post(`profile/api/nextcomments`, {
+        postId: postIdc,
+        nComments: nCommetnsc,
+      })
+      .then((response) => response);
+  },
+
   DeleteCommentFromApi(comId) {
     return instanceMyAPI
       .post(`profile/api/deletecomment`, {
         commentId: comId,
+      })
+      .then((response) => response);
+  },
+
+  DeletePostFromApi(postIdc) {
+    return instanceMyAPI
+      .post(`profile/api/deletepost`, {
+        postId: postIdc,
       })
       .then((response) => response);
   },
