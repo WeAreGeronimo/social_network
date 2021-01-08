@@ -7,6 +7,8 @@ const UPDATE_LIKED_UNLIKED_POST = 'UPDATE_LIKED_UNLIKED_POST';
 const UPDATE_COMMENT_ARRAY = 'UPDATE_COMMENT_ARRAY';
 const UPDATE_LIKE_ARRAY_COMMENTS = 'UPDATE_LIKE_ARRAY_COMMENTS';
 const DELETE_COMMENT = 'DELETE_COMMENT';
+const DELETE_POST = 'DELETE_POST';
+const UPDATE_COUNT_COMMENTS = 'UPDATE_COUNT_COMMENTS';
 
 const initialState = {
   posts: [],
@@ -31,10 +33,31 @@ const initialState = {
 const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_POST: {
+      if (Array.isArray(action.payload)) {
+        return {
+          ...state,
+          ...state.posts,
+          posts: [...state.posts, ...action.payload],
+        };
+      } else if (!Array.isArray(action.payload)) {
+        return {
+          ...state,
+          ...state.posts,
+          posts: [...state.posts, action.payload],
+        };
+      }
+      return state;
+    }
+
+    case DELETE_POST: {
+      debugger;
+      // eslint-disable-next-line no-return-assign
       return {
         ...state,
-        ...state.posts,
-        posts: [...state.posts, ...action.payload.posts],
+        ...(state.profile.postsLength = action.payload.postsLength),
+        posts: state.posts.filter((post) => {
+          return post.postId !== action.payload.deletedPost.postId;
+        }),
       };
     }
 
@@ -84,22 +107,23 @@ const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         posts: state.posts.map((el) => {
-          if (el.postId === action.payload.postId) {
-            return {
-              ...el,
-              comments: [
-                ...el.comments,
-                {
-                  commentId: action.payload.commentId,
-                  name: action.payload.nameComment,
-                  nickname: action.payload.nicknameComment,
-                  surname: action.payload.surnameComment,
-                  whenTime: action.payload.whenTimeComment,
-                  textComment: action.payload.textComment,
-                  likes: action.payload.likesComment,
-                },
-              ],
-            };
+          if (Array.isArray(action.payload.comments)) {
+            action.payload.comments.map((comment) => {
+              if (comment.postId === el.postId) {
+                el.comments = [...el.comments, comment];
+                return el;
+              }
+              return el;
+            });
+          } else if (!Array.isArray(action.payload.comments)) {
+            if (action.payload.comments.postId === el.postId) {
+              return {
+                ...el,
+                commentsCountInApi: action.payload.commentsCountInApi,
+                comments: [...el.comments, action.payload.comments],
+              };
+            }
+            return el;
           }
           return el;
         }),
@@ -107,12 +131,14 @@ const profileReducer = (state = initialState, action) => {
     }
 
     case DELETE_COMMENT: {
+      debugger;
       return {
         ...state,
         posts: state.posts.map((el) => {
           if (el.postId === action.payload.postId) {
             return {
               ...el,
+              commentsCountInApi: action.payload.commentsCountInApi,
               comments: el.comments.filter((comment) => {
                 return comment.commentId !== action.payload.commentId;
               }),
@@ -128,9 +154,14 @@ const profileReducer = (state = initialState, action) => {
   }
 };
 
-export const addPost = (posts) => ({
+export const addPost = (payload) => ({
   type: ADD_POST,
-  payload: { posts },
+  payload,
+});
+
+export const deletePost = (payload) => ({
+  type: DELETE_POST,
+  payload,
 });
 
 export const setUserProfile = (payload) => ({
@@ -159,48 +190,30 @@ export const updateStatusTimeInState = (timeCreation) => ({
   timeCreation,
 });
 
-export const AddComment = (
-  commentId,
-  nameComment,
-  nicknameComment,
-  surnameComment,
-  textComment,
-  whenTimeComment,
-  likesComment,
-  postId,
-) => ({
+export const AddComment = (payload) => ({
   type: UPDATE_COMMENT_ARRAY,
-  payload: {
-    commentId,
-    whenTimeComment,
-    textComment,
-    likesComment,
-    nameComment,
-    nicknameComment,
-    surnameComment,
-    postId,
-  },
+  payload,
 });
 
-export const DeleteComment = (commentId, postId) => ({
+export const DeleteComment = (payload) => ({
   type: DELETE_COMMENT,
-  payload: {
-    commentId,
-    postId,
-  },
+  payload,
 });
 
 export const DeleteCommentTh = (commentId, postId) => {
   return (dispatch) => {
     profileAPI.DeleteCommentFromApi(commentId).then((response) => {
       if (response.data.resultCode === 0) {
-        dispatch(
-          DeleteComment(
-            response.data.apiData.commentId,
-            response.data.apiData.postId,
-          ),
-        );
+        dispatch(DeleteComment(response.data.apiData));
       }
+    });
+  };
+};
+
+export const DeletePostTh = (postId) => {
+  return (dispatch) => {
+    profileAPI.DeletePostFromApi(postId).then((response) => {
+      dispatch(deletePost(response.data.apiData));
     });
   };
 };
@@ -221,8 +234,17 @@ export const getNextWallPosts = (userIdc, nPostc) => {
     profileAPI
       .GetNextWallPostsFromApi(userIdc, nPostc)
       .then((response) => {
-        // eslint-disable-next-line array-callback-return
         dispatch(addPost(response.data.apiData.posts));
+      });
+  };
+};
+
+export const getNextPostsComments = (postIdc, nCommentsc) => {
+  return (dispatch) => {
+    profileAPI
+      .GetNextWallCommentsFromApi(postIdc, nCommentsc)
+      .then((response) => {
+        dispatch(AddComment(response.data.apiData));
       });
   };
 };
@@ -256,19 +278,7 @@ export const putPostInApi = (text, whenTime, whoseWall) => {
       .putNewPostOnWall(whenTime, text, whoseWall)
       .then((response) => {
         if (response.data.resultCode === 0) {
-          debugger;
-          dispatch(
-            addPost(
-              response.data.apiData.postedPost.name,
-              response.data.apiData.postedPost.surname,
-              response.data.apiData.postedPost.postId,
-              response.data.apiData.postedPost.text,
-              response.data.apiData.postedPost.whenTime,
-              response.data.apiData.postedPost.likes,
-              response.data.apiData.postedPost.nickname,
-              response.data.apiData.postedPost.comments,
-            ),
-          );
+          dispatch(addPost(response.data.apiData.postedPost));
         }
       });
   };
@@ -285,18 +295,7 @@ export const putCommentPostInApi = (
       .putNewCommentOnWallPost(text, whenTime, whoseWall, postId)
       .then((response) => {
         if (response.data.resultCode === 0) {
-          dispatch(
-            AddComment(
-              response.data.apiData.postedComment.commentId,
-              response.data.apiData.postedComment.name,
-              response.data.apiData.postedComment.nickname,
-              response.data.apiData.postedComment.surname,
-              response.data.apiData.postedComment.textComment,
-              response.data.apiData.postedComment.whenTime,
-              response.data.apiData.postedComment.likes,
-              postId,
-            ),
-          );
+          dispatch(AddComment(response.data.apiData));
         }
       });
   };
