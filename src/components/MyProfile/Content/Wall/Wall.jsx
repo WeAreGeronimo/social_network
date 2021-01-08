@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import Post from './Posts/Posts';
 import _css from './Wall.module.css';
-import AllPostsAreShowed from './nextPostsBar/allPostsAreShowed';
 import NextPostsBar from './nextPostsBar/nextPostsBar';
-import PostsNextBarModule from './nextPostsBar/PostsNextBarModule';
+import { beautifulWhenTimeText } from '../../../../common/TimeTextFunc';
 
 const FormForWall = (props) => {
   return (
@@ -34,14 +33,17 @@ const Wall = (props) => {
     const whenTime = Date.now();
     props.putPostInApi(formData.textPost, whenTime, props.profile.id);
   };
-  let userHaveASomePosts = false;
   const [allPostAreShowed, setAllPostAreShowed] = useState(false);
+  const [userHaveASomePosts, setUserHaveASomePosts] = useState(false);
+  useEffect(() => {
+    if (props.profile.postsLength !== 0) {
+      setUserHaveASomePosts(true);
+    } else if (props.profile.postsLength === 0) {
+      setUserHaveASomePosts(false);
+    }
+  }, [props.profile.postsLength]);
 
   const [nextPosts, setNextPosts] = useState(0);
-
-  if (props.profile.postsLength !== 0) {
-    userHaveASomePosts = true;
-  }
   props.posts?.sort(function (a, b) {
     return a.whenTime - b.whenTime;
   });
@@ -51,6 +53,9 @@ const Wall = (props) => {
       <div className={_css.sorting_post}>
         {props?.posts.map((postInformation) => (
           <Post
+            deletePost={props.DeletePostTh}
+            whoseWall={props.profile.id}
+            from={postInformation.from}
             commentsCountInApi={postInformation.commentsCountInApi}
             AuthUserId={props.AuthUserId}
             name={postInformation.name}
@@ -68,10 +73,11 @@ const Wall = (props) => {
             putCommentPostInApi={props.putCommentPostInApi}
             DeleteCommentTh={props.DeleteCommentTh}
             beautifulWhenTimeText={props.beautifulWhenTimeText}
+            getNextPostsComments={props.getNextPostsComments}
           />
         ))}
       </div>
-      {userHaveASomePosts && (
+      {userHaveASomePosts ? (
         <NextPostsBar
           postsLength={props.profile.postsLength}
           allPostAreShowed={allPostAreShowed}
@@ -82,9 +88,10 @@ const Wall = (props) => {
           profileId={props.profile.id}
           getNextWallPosts={props.getNextWallPosts}
         />
-      )}{' '}
-      {!userHaveASomePosts && (
-        <div>Пользователь не добавил ни одного поста...</div>
+      ) : (
+        <div className={_css.nothingPost}>
+          <span>Пользователь не добавил ни одного поста...</span>
+        </div>
       )}
     </div>
   );
