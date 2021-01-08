@@ -23,7 +23,7 @@ const NextPostsBar = (props) => {
           <span>Загрузить еще...</span>
         </div>
       )}
-      {props.allPostAreShowed && <AllPostsAreShowed />}
+      {/* {props.allPostAreShowed && <AllPostsAreShowed />} */}
     </div>
   );
 };
