@@ -13,27 +13,17 @@ const StatusH = (props) => {
   const [editMode, setEditMode] = useState(false);
   const [status, setStatus] = useState(props.status);
   const oldTimer = useRef(null);
-  const handlerTime = useRef(null);
+
   const updateTimeSeconds = 1000;
-  const updateText = () => {
-    if (handlerTime.current !== null) {
-      oldTimer.current = setInterval(() => {
-        const time = beautifulWhenTimeText(handlerTime.current);
-        setWhenUpdate(time);
-      }, updateTimeSeconds);
-    } else if (handlerTime == null) {
-      oldTimer.current = setInterval(() => {
-        const time = beautifulWhenTimeText(props.timeCreation);
-        setWhenUpdate(time);
-      }, updateTimeSeconds);
-    }
-  };
 
   useEffect(() => {
     clearInterval(oldTimer.current);
-    updateText();
+    oldTimer.current = setInterval(() => {
+      const time = beautifulWhenTimeText(props.timeCreation);
+      setWhenUpdate(time);
+    }, updateTimeSeconds);
     // return () => clearInterval(oldTimer.current);
-  }, [props.timeCreation, status]);
+  }, [props.timeCreation]);
 
   useEffect(() => {
     setStatus(props.status);
@@ -45,41 +35,60 @@ const StatusH = (props) => {
     setEditMode(true);
   };
   const deactivateEditMode = () => {
+    setWhenUpdate(null);
     setEditMode(false);
     const timeNow = Date.now();
     clearInterval(oldTimer.current);
     props.setNewStatus(status, timeNow);
-    handlerTime.current = timeNow;
-    updateText();
   };
   const onStatusChange = (e) => {
     setStatus(e.currentTarget.value);
   };
+  let checkRightsForChangingStatus = false;
+  if (props.AuthUserId === props.profile.id) {
+    checkRightsForChangingStatus = true;
+  }
 
   return (
     <div className={_css.statusWrapper}>
-      <div className={_css.status}>
-        {!editMode &&
-          (status ? (
-            <span onClick={activateEditMode}>{status}</span>
-          ) : (
-            <span onClick={activateEditMode}>
-              Нажмите, чтобы изменить
-            </span>
-          ))}{' '}
-        {editMode && (
-          <input
-            // eslint-disable-next-line jsx-a11y/no-autofocus
-            autoFocus
-            onChange={onStatusChange}
-            onBlur={deactivateEditMode}
-            value={status}
-          />
-        )}
-      </div>
-      <div className={_css.timer_status}>
-        Обновлено{whenUpdateStore}
-      </div>
+      {checkRightsForChangingStatus && (
+        <div className={_css.status}>
+          {!editMode &&
+            (status ? (
+              <span onClick={activateEditMode}>{status}</span>
+            ) : (
+              <span
+                className={_css.emptyStatus}
+                onClick={activateEditMode}
+              >
+                Нажмите, чтобы изменить
+              </span>
+            ))}
+          {editMode && (
+            <input
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
+              onChange={onStatusChange}
+              onBlur={deactivateEditMode}
+              value={status}
+            />
+          )}
+        </div>
+      )}
+      {!checkRightsForChangingStatus && (
+        <div className={_css.status}>
+          <span>{status}</span>
+        </div>
+      )}
+      {status ? (
+        <div className={_css.timer_status}>
+          {editMode
+            ? null
+            : whenUpdateStore && `Обновлено${whenUpdateStore}`}
+        </div>
+      ) : (
+        <div className={_css.timer_status} />
+      )}
     </div>
   );
 };
@@ -87,6 +96,7 @@ const StatusH = (props) => {
 const mapStateToProps = (state) => ({
   status: state.profilePage.statusH.statusText,
   timeCreation: state.profilePage.statusH.timeCreation,
+  AuthUserId: state.auth.userId,
   profile: state.profilePage.profile,
 });
 

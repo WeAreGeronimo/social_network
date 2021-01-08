@@ -16,3 +16,11 @@
   .status input {
       border: none;
   }
+
+.emptyStatus {
+    color: rgba(165,165,165,0.5);
+}
+
+.status {
+    margin-top: 2px;
+}
