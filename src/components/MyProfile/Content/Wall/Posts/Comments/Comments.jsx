@@ -1,15 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import _css from './Comments.module.css';
-import Like from '../../../../../assets/Like/LikeSmall';
-import DeleteButton from '../../../../../assets/DeleteImageSvg/Delete';
-import { beautifulWhenTimeText } from '../../../../../common/TimeTextFunc';
+import Like from '../../../../../../assets/Like/LikeSmall';
+import DeleteButton from '../../../../../../assets/DeleteImageSvg/Delete';
+import { beautifulWhenTimeText } from '../../../../../../common/TimeTextFunc';
 
 const CommentsItem = (props) => {
-  const deletePost = () => {
-    props.DeleteCommentTh(props.commentId, props.postId);
-  };
   const [deleteShow, setDeleteShow] = useState(_css.deleteBlockNone);
-  const [focusDeleteIcon, setFocusDeleteIcon] = useState(false);
   const oldTimerForComment = useRef(null);
   const initialTimeValueComment = beautifulWhenTimeText(
     props.whenTime,
@@ -20,13 +16,52 @@ const CommentsItem = (props) => {
   const updateTimeInSeconds = 1000;
 
   useEffect(() => {
-    clearInterval(oldTimerForComment);
+    clearInterval(oldTimerForComment.current);
     oldTimerForComment.current = setInterval(() => {
       setTimeComment(beautifulWhenTimeText(props.whenTime));
     }, updateTimeInSeconds);
+    return () => {
+      clearInterval(oldTimerForComment.current);
+    };
   }, [props.whenTime]);
-
-  return (
+  let itsYourWall = false;
+  let itsYourComment = false;
+  if (props.AuthUserId === props.whoseWall) {
+    itsYourWall = true;
+  }
+  if (props.AuthUserId === props.from) {
+    itsYourComment = true;
+  }
+  let checkRightsForDeleting = false;
+  if (itsYourWall || itsYourComment) {
+    checkRightsForDeleting = true;
+  }
+  const [deleteMode, setDeleteMode] = useState(false);
+  const deleteComment = () => {
+    props.DeleteCommentTh(props.commentId, props.postId);
+    setDeleteMode(false);
+  };
+  return deleteMode ? (
+    <div className={_css.wrap_delete}>
+      <span className={_css.deleteMessage}>
+        Комментарий будет безвозвратно удален.
+      </span>
+      <div className={_css.deleteBlock}>
+        <div className={_css.cancelBlock_button}>
+          <span
+            onClick={() => {
+              setDeleteMode(false);
+            }}
+          >
+            Отменить
+          </span>
+        </div>
+        <div className={_css.deleteBlock_button}>
+          <span onClick={deleteComment}>Удалить</span>
+        </div>
+      </div>{' '}
+    </div>
+  ) : (
     <div
       className={_css.wrapper}
       onPointerEnter={(e) => {
@@ -50,18 +85,16 @@ const CommentsItem = (props) => {
             </a>
           </div>
           <div className={_css.delete}>
-            <span
-              className={deleteShow}
-              onPointerEnter={(e) => {
-                setFocusDeleteIcon(true);
-              }}
-              onPointerLeave={(e) => {
-                setFocusDeleteIcon(false);
-              }}
-              onClick={deletePost}
-            >
-              <DeleteButton focusDeleteIcon={focusDeleteIcon} />
-            </span>
+            {checkRightsForDeleting && (
+              <span
+                className={deleteShow}
+                onClick={() => {
+                  setDeleteMode(true);
+                }}
+              >
+                <DeleteButton />
+              </span>
+            )}
           </div>
         </div>
         <div className={_css.wrapper_bubble}>
