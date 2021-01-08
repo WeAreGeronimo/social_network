@@ -2,14 +2,13 @@
 export const beautifulWhenTimeText = (timeFromStore) => {
   const timeNOW = Date.now();
   const deltaTimeInSeconds = Math.floor(
-    (timeNOW - timeFromStore) / 1000,
+    (timeNOW - +timeFromStore) / 1000,
   );
   const deltaTimeInMinutes = Math.floor(deltaTimeInSeconds / 60);
 
   const deltaTimeInHours = Math.floor(deltaTimeInMinutes / 60);
 
   const deltaTimeInDays = Math.floor(deltaTimeInHours / 24);
-
   if (deltaTimeInSeconds < 10) return ' только что';
   else if (deltaTimeInSeconds >= 10 && deltaTimeInSeconds < 30)
     return wordCorrect(deltaTimeInSeconds, 's');
@@ -23,7 +22,8 @@ export const beautifulWhenTimeText = (timeFromStore) => {
     return ' вчера';
   else if (deltaTimeInDays >= 2 && deltaTimeInDays < 3)
     return ' позавчера';
-  else if (deltaTimeInDays >= 3) return wordCorrect(deltaTimeInDays, 'd');
+  else if (deltaTimeInDays >= 3)
+    return wordCorrect(deltaTimeInDays, 'd');
 };
 
 const twoOrOneLastNumbersInValue = (value) => {
@@ -56,44 +56,44 @@ const wordCorrect = (count, timeMeasure) => {
   const lastNumber = twoOrOneLastNumbersInValue(count);
 
   if (+lastNumber === 1) {
-    if(timeMeasure === 's') {
+    if (timeMeasure === 's') {
       return ` ${count} секунду назад`;
     }
-    if(timeMeasure === 'm') {
+    if (timeMeasure === 'm') {
       return ` ${count} минуту назад`;
     }
-    if(timeMeasure === 'h') {
+    if (timeMeasure === 'h') {
       return ` ${count} час назад`;
     }
-    if(timeMeasure === 'd') {
+    if (timeMeasure === 'd') {
       return ` ${count} день назад`;
     }
   }
   if (+lastNumber >= 2 && +lastNumber <= 4) {
-    if(timeMeasure === 's') {
+    if (timeMeasure === 's') {
       return ` ${count} секунды назад`;
     }
-    if(timeMeasure === 'm') {
+    if (timeMeasure === 'm') {
       return ` ${count} минуты назад`;
     }
-    if(timeMeasure === 'h') {
+    if (timeMeasure === 'h') {
       return ` ${count} часа назад`;
     }
-    if(timeMeasure === 'd') {
+    if (timeMeasure === 'd') {
       return ` ${count} дня назад`;
     }
   }
-  if (+lastNumber >= 5 && +lastNumber <= 14 || +lastNumber === 0 ) {
-    if(timeMeasure === 's') {
+  if ((+lastNumber >= 5 && +lastNumber <= 14) || +lastNumber === 0) {
+    if (timeMeasure === 's') {
       return ` ${count} секунд назад`;
     }
-    if(timeMeasure === 'm') {
+    if (timeMeasure === 'm') {
       return ` ${count} минут назад`;
     }
-    if(timeMeasure === 'h') {
+    if (timeMeasure === 'h') {
       return ` ${count} часов назад`;
     }
-    if(timeMeasure === 'd') {
+    if (timeMeasure === 'd') {
       return ` ${count} дней назад`;
     }
   }
