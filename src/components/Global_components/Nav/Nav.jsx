@@ -1,12 +1,17 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { withAuthRedirect } from '../../HOC/withAuthRedirect';
 import _css from './Nav.module.css';
 
-const NAV = () => {
+const NAV = (props) => {
   return (
     <nav className={_css.nav}>
       <div className={_css.nav_elements}>
-        <NavLink to="/profile">Моя Страница</NavLink>
+        <NavLink to={`/profile/${props.AuthUserId}`}>
+          Моя Страница
+        </NavLink>
       </div>
       <div className={_css.nav_elements}>
         <NavLink to="/friends">Мои Друзья</NavLink>
@@ -39,4 +44,12 @@ const NAV = () => {
   );
 };
 
-export default NAV;
+const mapStateToProps = (state) => ({
+  AuthUserId: state.auth.userId,
+});
+
+export default compose(
+  connect(mapStateToProps, {}),
+  withRouter,
+  withAuthRedirect,
+)(NAV);

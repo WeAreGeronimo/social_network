@@ -13,6 +13,18 @@ import MyProfile from './MyProfile';
 
 class ProfileContainer extends React.Component {
   componentDidMount() {
+    this.refreshProfile();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (
+      this.props.match.params.userId !== prevProps.match.params.userId
+    ) {
+      this.refreshProfile();
+    }
+  }
+
+  refreshProfile() {
     let userId = this.props.match.params.userId;
     if (!userId) {
       userId = this.props.AuthUserId;

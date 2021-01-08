@@ -31,6 +31,7 @@ class App extends React.Component {
         <Nav />
         <div className="module">
           <Route
+            exact
             path="/profile/:userId?"
             render={() => <ProfileContainer />}
           />

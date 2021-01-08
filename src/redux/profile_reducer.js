@@ -8,7 +8,7 @@ const UPDATE_COMMENT_ARRAY = 'UPDATE_COMMENT_ARRAY';
 const UPDATE_LIKE_ARRAY_COMMENTS = 'UPDATE_LIKE_ARRAY_COMMENTS';
 const DELETE_COMMENT = 'DELETE_COMMENT';
 const DELETE_POST = 'DELETE_POST';
-const UPDATE_COUNT_COMMENTS = 'UPDATE_COUNT_COMMENTS';
+const RELOAD_POST = 'RELOAD_POST';
 
 const initialState = {
   posts: [],
@@ -39,18 +39,36 @@ const profileReducer = (state = initialState, action) => {
           ...state.posts,
           posts: [...state.posts, ...action.payload],
         };
-      } else if (!Array.isArray(action.payload)) {
+      } else if (!Array.isArray(action.payload.postedPost)) {
+        // eslint-disable-next-line no-return-assign
         return {
           ...state,
-          ...state.posts,
+          ...(state.profile.postsLength = action.payload.postsLength),
           posts: [...state.posts, action.payload],
         };
       }
       return state;
     }
 
+    case RELOAD_POST: {
+      if (action.payload.posts.length > 0) {
+        // eslint-disable-next-line no-return-assign
+        return {
+          ...state,
+          ...(state.profile.postsLength = action.payload.postsLength),
+          posts: action.payload.posts,
+        };
+      } else if (action.payload.posts.length === 0) {
+        // eslint-disable-next-line no-return-assign
+        return {
+          ...state,
+          ...(state.profile.postsLength = action.payload.postsLength),
+        };
+      }
+      return state;
+    }
+
     case DELETE_POST: {
-      debugger;
       // eslint-disable-next-line no-return-assign
       return {
         ...state,
@@ -68,10 +86,7 @@ const profileReducer = (state = initialState, action) => {
     case SET_STATUS: {
       return {
         ...state,
-        statusH: {
-          statusText: action.statusText,
-          timeCreation: action.timeCreation,
-        },
+        statusH: action.payload,
       };
     }
 
@@ -131,7 +146,6 @@ const profileReducer = (state = initialState, action) => {
     }
 
     case DELETE_COMMENT: {
-      debugger;
       return {
         ...state,
         posts: state.posts.map((el) => {
@@ -159,6 +173,11 @@ export const addPost = (payload) => ({
   payload,
 });
 
+export const reloadPost = (payload) => ({
+  type: RELOAD_POST,
+  payload,
+});
+
 export const deletePost = (payload) => ({
   type: DELETE_POST,
   payload,
@@ -179,10 +198,9 @@ export const AddOrDeleteLikeComment = (payload) => ({
   payload,
 });
 
-export const updateStatusInState = (statusText, timeCreation) => ({
+export const updateStatusInState = (payload) => ({
   type: SET_STATUS,
-  statusText,
-  timeCreation,
+  payload,
 });
 
 export const updateStatusTimeInState = (timeCreation) => ({
@@ -203,9 +221,7 @@ export const DeleteComment = (payload) => ({
 export const DeleteCommentTh = (commentId, postId) => {
   return (dispatch) => {
     profileAPI.DeleteCommentFromApi(commentId).then((response) => {
-      if (response.data.resultCode === 0) {
-        dispatch(DeleteComment(response.data.apiData));
-      }
+      dispatch(DeleteComment(response.data.apiData));
     });
   };
 };
@@ -221,9 +237,10 @@ export const DeletePostTh = (postId) => {
 export const getUserProfile = (userId) => {
   return (dispatch) => {
     profileAPI.getProfile(userId).then((response) => {
+      debugger;
       dispatch(setUserProfile(response.data.apiData));
       if (response.data.apiData.posts.length !== 0) {
-        dispatch(addPost(response.data.apiData.posts));
+        dispatch(reloadPost(response.data.apiData));
       }
     });
   };
@@ -252,12 +269,7 @@ export const getNextPostsComments = (postIdc, nCommentsc) => {
 export const getStatusFromAPI = (userId) => {
   return (dispatch) => {
     profileAPI.getStatus(userId).then((response) => {
-      dispatch(
-        updateStatusInState(
-          response.data.apiData.status.statusText,
-          response.data.apiData.status.timeCreation,
-        ),
-      );
+      dispatch(updateStatusInState(response.data.apiData.status));
     });
   };
 };
@@ -266,7 +278,7 @@ export const setNewStatus = (text, time) => {
   return (dispatch) => {
     profileAPI.updateStatus(text, time).then((response) => {
       if (response.data.resultCode === 0) {
-        dispatch(updateStatusInState(text));
+        dispatch(updateStatusInState(response.data.apiData.status));
       }
     });
   };

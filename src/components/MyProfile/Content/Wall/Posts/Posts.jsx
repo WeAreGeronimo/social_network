@@ -128,7 +128,7 @@ const POST = (props) => {
         }}
       >
         <div className={_css.name_surname}>
-          <a href="#">
+          <a href={`/profile/${props.from}`}>
             {props.name} {props.nickname} {props.surname}{' '}
           </a>{' '}
           написал:
